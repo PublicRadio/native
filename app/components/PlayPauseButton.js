@@ -19,17 +19,17 @@ const styles = StyleSheet.create({
 });
 
 export default class PlayPauseButton extends Component {
-    render() {   
-        const iconName = (this.props.mode === 'paused' || this.props.mode === 'stopped') ? 'play-arrow' : 'pause' ;
+    render() {
+        const {mode} = this.props
+        const isPaused = mode === 'paused' || mode === 'stopped'
+        const iconName = isPaused ? 'play-arrow' : 'pause'
 
-        return <View style={styles.container}>
-            <TouchableOpacity onPress={this.props.onPress}>
-                <Icon
-                    name={iconName}
-                    size={30}
-                    color='#333333'
-                />
-            </TouchableOpacity>
-        </View>
+        return <TouchableOpacity onPress={this.props.onPress}>
+            <Icon
+                name={iconName}
+                size={30}
+                color='#333333'/>
+        </TouchableOpacity>
+
     }
 }

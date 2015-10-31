@@ -28,5 +28,7 @@ export default function createApiClientStore(client) {
         applyMiddleware(thunkMiddleware, promiseMiddleware, loggerMiddleware)
     )(createStore);
 
-    return finalCreateStore(reducer);
+    const store = finalCreateStore(reducer);
+    require('./modules/loader').init(store.dispatch.bind(store))
+    return store;
 }

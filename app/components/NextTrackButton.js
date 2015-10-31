@@ -19,15 +19,12 @@ const styles = StyleSheet.create({
 });
 
 export default class PlayPauseButton extends Component {
-    render() {   
-        return <View style={styles.container}>
-            <TouchableOpacity onPress={this.props.onPress}>
-                <Icon
-                    name='skip-next'
-                    size={30}
-                    color='#333333'
-                />
-            </TouchableOpacity>
-       </View>    
+    render() {
+        return <TouchableOpacity onPress={this.props.onPress}>
+            <Icon
+                name='skip-next'
+                size={30}
+                color='#333333'/>
+        </TouchableOpacity>
     }
 }

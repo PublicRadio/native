@@ -5,7 +5,8 @@ import { connect } from 'react-redux/native';
 import React, {
     Component,
     StyleSheet,
-    View
+    View,
+    Text
 } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -18,8 +19,9 @@ const styles = StyleSheet.create({
 });
 
 export default class PlayerView extends Component {
-    render() {   
+    render() {
         return <View style={styles.container}>
+            <Text>Tracks count: {this.props.tracks && this.props.tracks.length}</Text>
             <PlayPauseButton mode={this.props.mode} onPress={this.props.toggleButton}/>
             <NextTrackButton onPress={this.props.nextTrackButtonClick}/>
        </View>    
