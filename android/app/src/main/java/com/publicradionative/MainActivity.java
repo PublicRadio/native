@@ -12,7 +12,6 @@ import com.facebook.react.shell.MainReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
-
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
 

@@ -35,7 +35,6 @@ export const toggleButton = () =>
         }
     }
 
-
 export default handleActions({
         'SET_PLAYER_STATE': (state, {payload:{mode}})=> state.set('mode', mode),
         'TRACKS_LOADED': (state, {payload:{tracks}})=> {

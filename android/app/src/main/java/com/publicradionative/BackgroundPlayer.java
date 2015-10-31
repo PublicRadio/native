@@ -8,17 +8,13 @@ import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import android.content.Context;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.util.Log;
 
 import java.util.Random;
 import java.util.ArrayList;
-
-import javax.annotation.Nullable;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
     MediaPlayer mediaPlayer = null;
@@ -33,13 +29,6 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         context = reactContext;
     }
 
-    private void sendEvent(ReactContext reactContext,
-                           String eventName,
-                           @Nullable WritableMap params) {
-
-        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
-    }
-
     @Override
     public String getName() { return "BackgroundPlayer"; }
 
@@ -49,11 +38,11 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     
     private void setTrack(Track track) {
         Log.i(TAG, "now playing: " + track.artist + " " + track.title);
-        //todo
         WritableMap map = Arguments.createMap();
         map.putString("artist", track.artist);
         map.putString("title", track.title);
-        sendEvent(context, "PlayerTrackChange", map);
+        ReduxSender.sendEvent(context, "PlayerTrackChange", map);
+
         try { 
             if(mediaPlayer == null) {
                 mediaPlayer = MediaPlayer.create(context, track.uri);
