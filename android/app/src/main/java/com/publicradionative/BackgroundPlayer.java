@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
     MediaPlayer mediaPlayer = null;
-    ReactContext context;
+    ReactApplicationContext context;
     ArrayList<Track> tracks = new ArrayList<>();
     Random random = new Random();
 

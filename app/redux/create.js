@@ -7,6 +7,9 @@ import promiseMiddleware from 'redux-promise';
 import reducer from './modules/reducer';
 import apiMiddleware from './middleware/apiMiddleware';
 import {Iterable} from 'immutable';
+import * as nativeActions from '../actions/nativeActions';
+
+import { DeviceEventEmitter } from 'react-native';
 
 const loggerMiddleware = createLogger({
     transformer: (state) =>
@@ -30,6 +33,12 @@ export default function createApiClientStore(client) {
     )(createStore);
 
     const store = finalCreateStore(reducer);
+
+    DeviceEventEmitter.addListener('ReduxAction', (e:Event) =>
+        store.dispatch(nativeActions[e.actionName](e.payload)));
+    DeviceEventEmitter.addListener('AccessTokenUpdate', (e:Event) =>
+        console.log(e.token));
+
     store.dispatch(require('./modules/loader').init())
     return store;
 }

@@ -1,5 +1,8 @@
 package com.publicradionative;
 
+import android.app.Activity;
+import android.app.Application;
+
 import com.facebook.react.ReactPackage;
 import com.facebook.react.bridge.JavaScriptModule;
 import com.facebook.react.bridge.NativeModule;
@@ -13,16 +16,20 @@ import java.util.List;
 
 
 public class ProjectModulesPackage implements ReactPackage {
-
-    public ProjectModulesPackage() {
+    Activity currentActivity;
+    public ProjectModulesPackage(Activity activity) {
+        currentActivity = activity;
     }
 
     @Override
-    public List<NativeModule> createNativeModules(
-            ReactApplicationContext reactContext) {
+    public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
 
         List<NativeModule> modules = new ArrayList<>();
         modules.add(new BackgroundPlayer(reactContext));
+        modules.add(new LinkOpener(reactContext));
+        modules.add(new VKInterface(reactContext, currentActivity));
+        DefaultApplication application = (DefaultApplication)currentActivity.getApplication();
+        application.registerTokenCallback(new TokenCallback(reactContext));
         return modules;
     }
 
