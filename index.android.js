@@ -5,6 +5,7 @@
 'use strict';
 
 import React, {
+    Component,
     AppRegistry,
     StyleSheet,
     Text,
@@ -12,30 +13,6 @@ import React, {
     TouchableHighlight,
 } from 'react-native'
 import Icon from 'react-native-vector-icons/MaterialIcons'
-
-var PublicRadioNative = React.createClass({
-    render: function () {
-        return (
-            <View style={styles.container}>
-                <Text style={styles.welcome}>
-                    Button!
-                </Text>
-                <Icon
-                    name='pause'
-                    size={300}
-                    color='#333333'
-                />
-                <TouchableHighlight onPress={() => {}}>
-                    <Icon
-                        name='pause'
-                        size={30}
-                        color='#333333'
-                    />
-                </TouchableHighlight>
-            </View>
-        );
-    }
-});
 
 var styles = StyleSheet.create({
     container: {
@@ -55,5 +32,25 @@ var styles = StyleSheet.create({
         marginBottom: 5,
     },
 });
+
+class PublicRadioNative extends Component {
+    componentDidMount () {
+        require('react-native').NativeModules.BackgroundPlayer.play()
+    }
+    render () {
+        return <View style={styles.container}>
+            <Text style={styles.welcome}>
+                {Object.getOwnPropertyNames(require('react-native').NativeModules).join(', ')}
+            </Text>
+            <TouchableHighlight onPress={() => {}}>
+                <Icon
+                    name='pause'
+                    size={30}
+                    color='#333333'
+                />
+            </TouchableHighlight>
+        </View>
+    }
+}
 
 AppRegistry.registerComponent('PublicRadioNative', () => PublicRadioNative);
