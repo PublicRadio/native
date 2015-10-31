@@ -1,2 +1,1 @@
-import {default as _PlayPauseButton} from './PlayPauseButton'
-export const PlayPauseButton = _PlayPauseButton;
+export const PlayPauseButton = require('./PlayPauseButton.js')

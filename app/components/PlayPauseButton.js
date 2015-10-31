@@ -39,6 +39,6 @@ export default class PlayPauseButton extends Component {
                     color='#333333'
                 />
             </TouchableHighlight>
-       </View>    
+        </View>
     }
 }
