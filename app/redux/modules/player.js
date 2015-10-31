@@ -23,17 +23,17 @@ export const toggleButton = () =>
         switch (player.get('mode')) {
             case 'paused':
                 BackgroundPlayer.play()
-                return dispatch(createAction('ET_PLAYER_STATE')({mode: 'playing'}));
+                return dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
             case 'stopped':
                 BackgroundPlayer.setTrackList(demoTracks);
 
                 BackgroundPlayer.setNextTrack();
                 BackgroundPlayer.play()
 
-                return dispatch(createAction('ET_PLAYER_STATE')({mode: 'playing'}));
+                return dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
             default:
                 BackgroundPlayer.pause()
-                return dispatch(createAction('ET_PLAYER_STATE')({mode: 'paused'}));
+                return dispatch(createAction('SET_PLAYER_STATE')({mode: 'paused'}));
         }
 
     }
