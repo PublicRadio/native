@@ -1,7 +1,7 @@
 sudo: false
 language: android
 before_install:
-  - cd android
+  - cd android && chmod +x gradlew
 android:
   components:
     - build-tools-23.0.1
