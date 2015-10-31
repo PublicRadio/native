@@ -5,6 +5,7 @@ import thunkMiddleware from 'redux-thunk';
 import createLogger from 'redux-logger';
 import promiseMiddleware from 'redux-promise';
 import reducer from './modules/reducer';
+import apiMiddleware from './middleware/apiMiddleware';
 import {Iterable} from 'immutable';
 
 const loggerMiddleware = createLogger({
@@ -25,7 +26,7 @@ export default function createApiClientStore(client) {
     // const middleware = clientMiddleware(client);
 
     const finalCreateStore = compose(
-        applyMiddleware(thunkMiddleware, promiseMiddleware, loggerMiddleware)
+        applyMiddleware(apiMiddleware, thunkMiddleware, promiseMiddleware, loggerMiddleware)
     )(createStore);
 
     const store = finalCreateStore(reducer);
