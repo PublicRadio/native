@@ -23,7 +23,6 @@ export const toggleButton = () =>
                 dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
                 return;
             case 'stopped':
-                BackgroundPlayer.setTrackList(demoTracks);
                 BackgroundPlayer.setNextTrack();
                 BackgroundPlayer.play()
 
