@@ -1,5 +1,7 @@
 sudo: false
 language: android
+before_install:
+  - cd android
 android:
   components:
     - build-tools-23.0.1
