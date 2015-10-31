@@ -21,8 +21,12 @@ script:
   # - ./wait_for_emulator
   # - ./gradlew connectedCheck -PdisablePreDex
   - gradle assemble
+  
+node_js:
+  - '4'
 
 before_install:
+  - npm i -g npm@^2.0.0
   - npm i
   - cd android && chmod +x gradlew
 
