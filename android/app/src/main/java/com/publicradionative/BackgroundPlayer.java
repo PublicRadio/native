@@ -21,7 +21,7 @@ import java.util.ArrayList;
 import javax.annotation.Nullable;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
-    MediaPlayer mediaPlayer = new MediaPlayer();
+    MediaPlayer mediaPlayer = null;
     ReactContext context;
     ArrayList<Track> tracks = new ArrayList<>();
     Random random = new Random();
@@ -33,15 +33,12 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         context = reactContext;
     }
 
-
     private void sendEvent(ReactContext reactContext,
                            String eventName,
                            @Nullable WritableMap params) {
-        context
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, params);
-    }
 
+        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit(eventName, params);
+    }
 
     @Override
     public String getName() { return "BackgroundPlayer"; }
@@ -49,20 +46,25 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     private int getRandomTrackIndex() { return random.nextInt(tracks.size()); }
 
     private Track getRandomTrack() { return tracks.get(getRandomTrackIndex()); }
-
-    private void playNextTrack() { playTrack(getRandomTrack()); }
-
-    public void playTrack(Track track) {
+    
+    private void setTrack(Track track) {
         Log.i(TAG, "now playing: " + track.artist + " " + track.title);
         //todo
         WritableMap map = Arguments.createMap();
         map.putString("artist", track.artist);
         map.putString("title", track.title);
         sendEvent(context, "PlayerTrackChange", map);
-        mediaPlayer.stop();
-        mediaPlayer = MediaPlayer.create(context, track.uri);
-        play();
+        try { 
+            if(mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(context, track.uri);
+                return;
+            }
+            mediaPlayer.setDataSource(context, track.uri); 
+        } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }
+
+    @ReactMethod
+    public void setNextTrack() { setTrack(getRandomTrack()); }
 
     @ReactMethod
     public void setTrackList(ReadableArray items) {
@@ -78,10 +80,9 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void pause() { mediaPlayer.stop(); }
-
-    @ReactMethod
-    public void skip() { playNextTrack(); }
+    public void pause() { 
+        try { mediaPlayer.pause(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+    }
 }
 
 
