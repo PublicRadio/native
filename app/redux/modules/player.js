@@ -2,6 +2,7 @@ import { createAction } from 'redux-actions';
 import { handleActions } from 'redux-actions'
 import Immutable from 'immutable';
 import {NativeModules} from 'react-native';
+
 const {BackgroundPlayer} = NativeModules;
 
 const demoTracks = [
@@ -17,12 +18,14 @@ const demoTracks = [
     }
 ]
 
-export const nextTrackButtonClick = () => { 
-  BackgroundPlayer.stop();
-  BackgroundPlayer.setNextTrack();
-  BackgroundPlayer.play();
-  return createAction('SKIP_TRACK')();
-}
+export const nextTrackButtonClick = () =>  
+  (dispatch) => {
+    BackgroundPlayer.stop();
+    dispatch(createAction('SET_PLAYER_STATE')({mode: 'paused'}));
+    BackgroundPlayer.setNextTrack();
+    BackgroundPlayer.play();
+    dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
+  }
 
 export const toggleButton = () =>
     (dispatch, getState) => {
@@ -30,19 +33,20 @@ export const toggleButton = () =>
         switch (player.get('mode')) {
             case 'paused':
                 BackgroundPlayer.play()
-                return dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
+                dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
+                return;
             case 'stopped':
                 BackgroundPlayer.setTrackList(demoTracks);
-
                 BackgroundPlayer.setNextTrack();
                 BackgroundPlayer.play()
 
-                return dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
+                dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}));
+                return 
             default:
                 BackgroundPlayer.pause()
-                return dispatch(createAction('SET_PLAYER_STATE')({mode: 'paused'}));
+                dispatch(createAction('SET_PLAYER_STATE')({mode: 'paused'}));
+                return
         }
-
     }
 
 
