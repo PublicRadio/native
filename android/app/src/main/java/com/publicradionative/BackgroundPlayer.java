@@ -6,24 +6,24 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import android.content.ComponentName;
-import android.content.Intent;
 import android.content.ServiceConnection;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.IBinder;
-import android.os.Messenger;
 import android.util.Log;
 
 import java.util.ArrayList;
-
-import javax.annotation.Nullable;
+import java.util.Random;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
+    MediaPlayer mediaPlayer = null;
     ReactContext context;
     PlayerService player;
+    Random random = new Random();
 
     private PlayerService playerService;
     private boolean musicBound = false;
@@ -43,44 +43,42 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     };
 
     private static final String TAG = "BackgroundPlayer";
+    private ArrayList<AudioTrack> tracks;
 
     public BackgroundPlayer(ReactApplicationContext reactContext) {
         super(reactContext);
         context = reactContext;
-        player = new PlayerService(context);
+//        player = new PlayerService(context);
     }
-
-    private void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableMap params) {
-        context
-                .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-                .emit(eventName, params);
-    }
-
 
     @Override
     public String getName() { return "BackgroundPlayer"; }
 
     private int getRandomTrackIndex() { return random.nextInt(tracks.size()); }
-
     private AudioTrack getRandomTrack() { return tracks.get(getRandomTrackIndex()); }
-
-    private void playNextTrack() { playTrack(getRandomTrack()); }
-
-    public void playTrack(Track track) {
+    
+    private void setTrack(AudioTrack track) {
         Log.i(TAG, "now playing: " + track.artist + " " + track.title);
-        //todo
         WritableMap map = Arguments.createMap();
         map.putString("artist", track.artist);
         map.putString("title", track.title);
-        sendEvent(context, "PlayerTrackChange", map);
-        mediaPlayer.stop();
-        mediaPlayer = MediaPlayer.create(context, track.uri);
-        play();
+        ReduxSender.sendEvent(context, "PlayerTrackChange", map);
+
+        try { 
+            if(mediaPlayer == null) {
+                mediaPlayer = MediaPlayer.create(context, track.uri);
+                return;
+            }
+            mediaPlayer.setDataSource(context, track.uri); 
+        } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }
 
     @ReactMethod
+    public void setNextTrack() { setTrack(getRandomTrack()); }
+
+    @ReactMethod
     public void setTrackList(ReadableArray items) {
-        tracks = new ArrayList<Track>();
+        tracks = new ArrayList<AudioTrack>();
         int size = items.size();
         for (int i = 0; i < size; i++)
             tracks.add(new AudioTrack(items.getMap(i)));
@@ -92,8 +90,28 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
-    public void pause() { mediaPlayer.stop(); }
+    public void stop() { 
+        try { 
+            mediaPlayer.stop();
+            mediaPlayer = null;
+        } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+    }
 
     @ReactMethod
-    public void skip() { playNextTrack(); }
+    public void pause() { 
+        try { mediaPlayer.pause(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+    }
+}
+
+
+class Track {
+    Uri uri;
+    String artist;
+    String title;
+
+    public Track(ReadableMap trackInfo) {
+        uri = Uri.parse(trackInfo.getString("uri"));
+        artist = trackInfo.getString("artist");
+        title = trackInfo.getString("title");
+    }
 }

@@ -12,9 +12,19 @@ import com.facebook.react.shell.MainReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
 
 public class MainActivity extends Activity implements DefaultHardwareBackBtnHandler {
-
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
+
+    public static final String EXTRA_START_FULLSCREEN =
+            "com.example.android.uamp.EXTRA_START_FULLSCREEN";
+
+    /**
+     * Optionally used with {@link #EXTRA_START_FULLSCREEN} to carry a MediaDescription to
+     * the , speeding up the screen rendering
+     * while the {@link android.media.session.MediaController} is connecting.
+     */
+    public static final String EXTRA_CURRENT_MEDIA_DESCRIPTION =
+        "com.example.android.uamp.CURRENT_MEDIA_DESCRIPTION";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

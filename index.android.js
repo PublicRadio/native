@@ -4,7 +4,7 @@
  */
 'use strict';
 
-import React, { AppRegistry } from 'react-native'
-import {PlayPauseButton} from './components'
+import React, { AppRegistry } from 'react-native';
+import App from './app/containers/App';
 
-AppRegistry.registerComponent('PublicRadioNative', () => PlayPauseButton);
+AppRegistry.registerComponent('PublicRadioNative', () => App);
