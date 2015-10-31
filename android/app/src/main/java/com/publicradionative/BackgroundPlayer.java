@@ -80,6 +80,14 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     }
 
     @ReactMethod
+    public void stop() { 
+        try { 
+            mediaPlayer.stop();
+            mediaPlayer = null;
+        } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+    }
+
+    @ReactMethod
     public void pause() { 
         try { mediaPlayer.pause(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }

@@ -17,6 +17,13 @@ const demoTracks = [
     }
 ]
 
+export const nextTrackButtonClick = () => { 
+  BackgroundPlayer.stop();
+  BackgroundPlayer.setNextTrack();
+  BackgroundPlayer.play();
+  return createAction('SKIP_TRACK')();
+}
+
 export const toggleButton = () =>
     (dispatch, getState) => {
         const {player} = getState()
