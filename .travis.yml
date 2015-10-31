@@ -23,6 +23,7 @@ script:
   - gradle assemble
 
 before_install:
+  - npm i
   - cd android && chmod +x gradlew
 
 android:
