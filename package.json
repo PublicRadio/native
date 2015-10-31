@@ -2,7 +2,7 @@
   "name": "PublicRadioNative",
   "private": true,
   "scripts": {
-    "start": "react-native start",
+    "start": "react-native run-android",
     "semantic-release": "semantic-release pre && semantic-release post"
   },
   "dependencies": {
