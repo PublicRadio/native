@@ -6,37 +6,51 @@ import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReadableArray;
-import com.facebook.react.bridge.ReadableMap;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-import android.content.Context;
+import android.content.ComponentName;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.media.MediaPlayer;
-import android.net.Uri;
+import android.os.IBinder;
+import android.os.Messenger;
 import android.util.Log;
 
-import java.util.Random;
 import java.util.ArrayList;
 
 import javax.annotation.Nullable;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
-    MediaPlayer mediaPlayer = new MediaPlayer();
     ReactContext context;
-    ArrayList<Track> tracks = new ArrayList<>();
-    Random random = new Random();
+    PlayerService player;
+
+    private PlayerService playerService;
+    private boolean musicBound = false;
+    private ServiceConnection musicConnection = new ServiceConnection() {
+
+        @Override
+        public void onServiceConnected(ComponentName name, IBinder service) {
+            playerService = ((PlayerService.PlayerBinder) service).getService();
+            musicBound = true;
+        }
+
+        @Override
+        public void onServiceDisconnected(ComponentName name) {
+            playerService = null;
+            musicBound = false;
+        }
+    };
 
     private static final String TAG = "BackgroundPlayer";
 
     public BackgroundPlayer(ReactApplicationContext reactContext) {
         super(reactContext);
         context = reactContext;
+        player = new PlayerService(context);
     }
 
-
-    private void sendEvent(ReactContext reactContext,
-                           String eventName,
-                           @Nullable WritableMap params) {
+    private void sendEvent(ReactContext reactContext, String eventName, @Nullable WritableMap params) {
         context
                 .getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit(eventName, params);
@@ -48,7 +62,7 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
 
     private int getRandomTrackIndex() { return random.nextInt(tracks.size()); }
 
-    private Track getRandomTrack() { return tracks.get(getRandomTrackIndex()); }
+    private AudioTrack getRandomTrack() { return tracks.get(getRandomTrackIndex()); }
 
     private void playNextTrack() { playTrack(getRandomTrack()); }
 
@@ -69,7 +83,7 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         tracks = new ArrayList<Track>();
         int size = items.size();
         for (int i = 0; i < size; i++)
-            tracks.add(new Track(items.getMap(i)));
+            tracks.add(new AudioTrack(items.getMap(i)));
     }
 
     @ReactMethod
@@ -82,17 +96,4 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void skip() { playNextTrack(); }
-}
-
-
-class Track {
-    Uri uri;
-    String artist;
-    String title;
-
-    public Track(ReadableMap trackInfo) {
-        uri = Uri.parse(trackInfo.getString("uri"));
-        artist = trackInfo.getString("artist");
-        title = trackInfo.getString("title");
-    }
 }
