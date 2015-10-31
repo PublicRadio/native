@@ -2,4 +2,5 @@
     <string name="app_name">PublicRadioNative</string>
     <string name="random_queue_title">Random music</string>
     <string name="error_no_metadata">Unable to retrieve metadata.</string>
+    <integer name="com_vk_sdk_AppId">5128900</integer>
 </resources>

@@ -21,8 +21,9 @@ import java.util.Random;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
     MediaPlayer mediaPlayer = null;
-    ReactContext context;
     PlayerService player;
+    ReactApplicationContext context;
+    ArrayList<AudioTrack> tracks = new ArrayList<>();
     Random random = new Random();
 
     private PlayerService playerService;
@@ -43,7 +44,6 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     };
 
     private static final String TAG = "BackgroundPlayer";
-    private ArrayList<AudioTrack> tracks;
 
     public BackgroundPlayer(ReactApplicationContext reactContext) {
         super(reactContext);
@@ -54,7 +54,8 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     @Override
     public String getName() { return "BackgroundPlayer"; }
 
-    private int getRandomTrackIndex() { return random.nextInt(tracks.size()); }
+    private int getRandomTrackIndex() { return random.nextInt(tracks.size()); }    
+    
     private AudioTrack getRandomTrack() { return tracks.get(getRandomTrackIndex()); }
     
     private void setTrack(AudioTrack track) {
@@ -102,7 +103,6 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         try { mediaPlayer.pause(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }
 }
-
 
 class Track {
     Uri uri;
