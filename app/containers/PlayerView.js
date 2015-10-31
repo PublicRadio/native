@@ -1,5 +1,5 @@
 import * as playerActions from '../redux/modules/player';
-import { PlayPauseButton, NextTrackButton } from '../components';
+import { PlayPauseButton, NextTrackButton } from '../components/index';
 import { connect } from 'react-redux/native';
 
 import React, {

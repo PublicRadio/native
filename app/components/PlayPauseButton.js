@@ -6,6 +6,7 @@ import React, {
     Text,
     View,
     TouchableHighlight,
+    TouchableOpacity,
 } from 'react-native'
 
 const styles = StyleSheet.create({
@@ -22,13 +23,13 @@ export default class PlayPauseButton extends Component {
         const iconName = (this.props.mode === 'paused' || this.props.mode === 'stopped') ? 'play-arrow' : 'pause' ;
 
         return <View style={styles.container}>
-            <TouchableHighlight onPress={this.props.onPress}>
+            <TouchableOpacity onPress={this.props.onPress}>
                 <Icon
                     name={iconName}
                     size={30}
                     color='#333333'
                 />
-            </TouchableHighlight>
+            </TouchableOpacity>
         </View>
     }
 }
