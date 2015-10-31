@@ -28,11 +28,13 @@ const styles = StyleSheet.create({
 });
 
 export default class PlayPauseButton extends Component {
-    render(){
+    render() {   
+        const iconName = this.props.mode === 'paused' ? 'play-arrow' : 'pause' ;
+
         return <View style={styles.container}>
-            <TouchableHighlight onPress={() => {}}>
+            <TouchableHighlight onPress={this.props.onPress}>
                 <Icon
-                    name='pause'
+                    name={iconName}
                     size={30}
                     color='#333333'
                 />
