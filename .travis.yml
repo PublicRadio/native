@@ -7,7 +7,7 @@ android:
     - build-tools-23.0.1
     - android-23
     - extra
-script: gradle assemble -info
+script: gradle assemble --stacktrace
 notifications:
   email: false
 node_js:
