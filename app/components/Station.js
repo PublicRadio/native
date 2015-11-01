@@ -10,9 +10,7 @@ import React, {
     TouchableOpacity,
 } from 'react-native'
 
-import SquareView from 'react-native-square-view'
 import {MKCardStyles} from 'react-native-material-kit'
-
 
 const styles = StyleSheet.create({
     container: {

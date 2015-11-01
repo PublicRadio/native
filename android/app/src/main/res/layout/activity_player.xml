@@ -22,7 +22,7 @@
     android:layout_height="match_parent"
     android:fitsSystemWindows="true"
     android:background="?colorPrimary"
-    tools:context=".MusicPlayerActivity">
+    tools:context=".MainActivity">
 
     <include android:id="@+id/toolbar"
              layout="@layout/include_toolbar"/>

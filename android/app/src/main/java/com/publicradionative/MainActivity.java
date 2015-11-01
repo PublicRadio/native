@@ -34,7 +34,7 @@ import java.util.List;
 /**
  * An Activity to browse and play media.
  */
-public class MusicPlayerActivity extends AppCompatActivity  implements DefaultHardwareBackBtnHandler {
+public class MainActivity extends AppCompatActivity  implements DefaultHardwareBackBtnHandler {
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
     private MediaBrowser mMediaBrowser;
@@ -45,7 +45,7 @@ public class MusicPlayerActivity extends AppCompatActivity  implements DefaultHa
                 public void onConnected() {
                     mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mSubscriptionCallback);
                     MediaController mediaController = new MediaController(
-                            MusicPlayerActivity.this, mMediaBrowser.getSessionToken());
+                            MainActivity.this, mMediaBrowser.getSessionToken());
                     updatePlaybackState(mediaController.getPlaybackState());
                     updateMetadata(mediaController.getMetadata());
                     mediaController.registerCallback(mMediaControllerCallback);
@@ -193,7 +193,7 @@ public class MusicPlayerActivity extends AppCompatActivity  implements DefaultHa
 //                    state == PlaybackState.STATE_NONE) {
 //
 //                if (mCurrentMetadata == null) {
-//                    mCurrentMetadata = MusicLibrary.getMetadata(MusicPlayerActivity.this,
+//                    mCurrentMetadata = MusicLibrary.getMetadata(MainActivity.this,
 //                            MusicLibrary.getMediaItems().get(0).getMediaId());
 //                    updateMetadata(mCurrentMetadata);
 //                }
