@@ -53,15 +53,13 @@ export const PlayerView = connect(state => state.player, playerActions)
     constructor(...args) {
         super(...args)
         this.state = {}
-    }
-
-    componentDidMount() {
+        this.loader = vk.getGroupTrackList(this.props.station)
         vk.getGroupInfo(this.props.station, ['photo_200'])
             .then(info => console.log(info) || this.setState(info))
     }
 
     render() {
-        const {name = '',screen_name = '',photo_200 = '', id } = this.state
+        const {name = '', screen_name = '', photo_200 = '', id } = this.state
         if (id) {
             return <View style={styles.container}>
                 <Image source={{uri: photo_200 }} style={styles.background}/>

@@ -10,7 +10,6 @@ import React, {
     TouchableOpacity,
 } from 'react-native'
 
-import {MKCardStyles} from 'react-native-material-kit'
 
 const styles = StyleSheet.create({
     container: {
@@ -39,9 +38,9 @@ const styles = StyleSheet.create({
 
 export default class Station extends Component {
     render() {
-        const {name,screen_name,photo_200, id, play} = this.props
-        return <TouchableOpacity onPress={() => play(id)} style={[styles.container, MKCardStyles.card]}>
-            <Image source={{uri: photo_200}} style={[styles.image, MKCardStyles.image]}/>
+        const {name, screen_name, photo_200, id, play} = this.props
+        return <TouchableOpacity onPress={() => play(id)} style={[styles.container]}>
+            <Image source={{uri: photo_200}} style={[styles.image]}/>
             <View style={styles.description}>
                 <Text style={[{fontSize: 24, textAlign: 'center'}]}>{name} - {screen_name}</Text>
             </View>
