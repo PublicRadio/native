@@ -11,7 +11,7 @@ import React, {
 } from 'react-native'
 
 import SquareView from 'react-native-square-view'
-
+import {MKCardStyles} from 'react-native-material-kit'
 
 
 const styles = StyleSheet.create({
@@ -32,18 +32,20 @@ const styles = StyleSheet.create({
     },
     description: {
         position: 'absolute',
-        bottom: 8,
-        backgroundColor: 'red'
+        bottom: 0,
+        width: Dimensions.get('window').width - 16,
+        backgroundColor: 'white',
+        alignItems: 'center'
     }
 });
 
 export default class Station extends Component {
     render() {
         const {name,screen_name,photo_200, id, play} = this.props
-        return <TouchableOpacity onPress={() => play(id)} style={styles.container}>
-            <Image source={{uri: photo_200}} style={styles.image}/>
+        return <TouchableOpacity onPress={() => play(id)} style={[styles.container, MKCardStyles.card]}>
+            <Image source={{uri: photo_200}} style={[styles.image, MKCardStyles.image]}/>
             <View style={styles.description}>
-                <Text>{name} - {screen_name}</Text>
+                <Text style={[{fontSize: 24, textAlign: 'center'}]}>{name} - {screen_name}</Text>
             </View>
         </TouchableOpacity>
 

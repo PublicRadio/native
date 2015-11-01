@@ -13,7 +13,7 @@ export const nextTrackButtonClick = () => (dispatch) => {
 
 export const toggleButton = () => (dispatch, getState) => {
         const {player} = getState()
-        switch (player.get('mode')) {
+        switch (player.mode) {
             case 'paused':
                 BackgroundPlayer.play()
             dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}))
