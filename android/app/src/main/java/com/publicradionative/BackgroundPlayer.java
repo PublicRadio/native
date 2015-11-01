@@ -21,34 +21,15 @@ import java.util.Random;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
     MediaPlayer mediaPlayer = null;
-    PlayerService player;
     ReactApplicationContext context;
     ArrayList<AudioTrack> tracks = new ArrayList<>();
     Random random = new Random();
-
-    private PlayerService playerService;
-    private boolean musicBound = false;
-    private ServiceConnection musicConnection = new ServiceConnection() {
-
-        @Override
-        public void onServiceConnected(ComponentName name, IBinder service) {
-            playerService = ((PlayerService.PlayerBinder) service).getService();
-            musicBound = true;
-        }
-
-        @Override
-        public void onServiceDisconnected(ComponentName name) {
-            playerService = null;
-            musicBound = false;
-        }
-    };
 
     private static final String TAG = "BackgroundPlayer";
 
     public BackgroundPlayer(ReactApplicationContext reactContext) {
         super(reactContext);
         context = reactContext;
-//        player = new PlayerService(context);
     }
 
     @Override

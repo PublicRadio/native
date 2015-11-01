@@ -7,22 +7,15 @@ import {Iterable} from 'immutable';
 import * as nativeActions from '../actions/nativeActions';
 import {vk} from '../lib/index'
 import {DeviceEventEmitter} from 'react-native';
-
 import thunkMiddleware from 'redux-thunk';
 import promiseMiddleware from 'redux-promise';
 import apiMiddleware from './middleware/apiMiddleware';
-
-
-
-
-
 
 const finalCreateStore = compose(
     applyMiddleware(apiMiddleware, thunkMiddleware, promiseMiddleware)
 )(createStore);
 
 export const store = finalCreateStore(reducer);
-
 
 DeviceEventEmitter.addListener('ReduxAction', (e:Event) =>
     store.dispatch(nativeActions[e.actionName](e.payload)));

@@ -8,306 +8,148 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.graphics.Bitmap;
-import android.graphics.Color;
 import android.media.MediaDescription;
 import android.media.MediaMetadata;
-import android.media.session.MediaController;
 import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Build;
-import android.support.annotation.NonNull;
-
-import com.publicradionative.utils.LogHelper;
-import com.publicradionative.utils.ResourceHelper;
 
 /**
  * Keeps track of a notification and updates it automatically for a given
- * MediaSession. Maintaining a visible notification (usually) guarantees that the music service
- * won't be killed during playback.
+ * MediaSession. This is required so that the music service
+ * don't get killed during playback.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class MediaNotificationManager extends BroadcastReceiver {
-    private static final String TAG = LogHelper.makeLogTag(MediaNotificationManager.class);
-
     private static final int NOTIFICATION_ID = 412;
     private static final int REQUEST_CODE = 100;
 
-    public static final String ACTION_PAUSE = "publicradionative.pause";
-    public static final String ACTION_PLAY = "publicradionative.play";
-    public static final String ACTION_PREV = "publicradionative.prev";
-    public static final String ACTION_NEXT = "publicradionative.next";
+    private static final String ACTION_PAUSE = "com.example.android.musicplayercodelab.pause";
+    private static final String ACTION_PLAY = "com.example.android.musicplayercodelab.play";
+    private static final String ACTION_NEXT = "com.example.android.musicplayercodelab.next";
 
-    private final PlayerService mService;
-    private MediaSession.Token mSessionToken;
-    private MediaController mController;
-    private MediaController.TransportControls mTransportControls;
-
-    private PlaybackState mPlaybackState;
-    private MediaMetadata mMetadata;
+    private final MusicService mService;
 
     private final NotificationManager mNotificationManager;
 
-    private final PendingIntent mPauseIntent;
-    private final PendingIntent mPlayIntent;
-    private final PendingIntent mPreviousIntent;
-    private final PendingIntent mNextIntent;
+    private final Notification.Action mPlayAction;
+    private final Notification.Action mPauseAction;
+    private final Notification.Action mNextAction;
 
+    private boolean mStarted;
 
-    private final int mNotificationColor;
-
-    private boolean mStarted = false;
-
-    public MediaNotificationManager(PlayerService service) {
+    public MediaNotificationManager(MusicService service) {
         mService = service;
-        updateSessionToken();
 
-        mNotificationColor = ResourceHelper.getThemeColor(mService, android.R.attr.colorPrimary, Color.DKGRAY);
+        String pkg = mService.getPackageName();
+        PendingIntent playIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
+                new Intent(ACTION_PLAY).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent pauseIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
+                new Intent(ACTION_PAUSE).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
+        PendingIntent nextIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
+                new Intent(ACTION_NEXT).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
+
+        mPlayAction = new Notification.Action(R.drawable.ic_play_arrow_white_24dp,
+                mService.getString(R.string.label_play), playIntent);
+        mPauseAction = new Notification.Action(R.drawable.ic_pause_white_24dp,
+                mService.getString(R.string.label_pause), pauseIntent);
+        mNextAction = new Notification.Action(R.drawable.ic_skip_next_white_24dp,
+                mService.getString(R.string.label_next), nextIntent);
+
+        IntentFilter filter = new IntentFilter();
+        filter.addAction(ACTION_NEXT);
+        filter.addAction(ACTION_PAUSE);
+        filter.addAction(ACTION_PLAY);
+
+        mService.registerReceiver(this, filter);
+
 
         mNotificationManager = (NotificationManager) mService
                 .getSystemService(Context.NOTIFICATION_SERVICE);
-
-        String pkg = mService.getPackageName();
-        mPauseIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
-                new Intent(ACTION_PAUSE).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
-        mPlayIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
-                new Intent(ACTION_PLAY).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
-        mPreviousIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
-                new Intent(ACTION_PREV).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
-        mNextIntent = PendingIntent.getBroadcast(mService, REQUEST_CODE,
-                new Intent(ACTION_NEXT).setPackage(pkg), PendingIntent.FLAG_CANCEL_CURRENT);
 
         // Cancel all notifications to handle the case where the Service was killed and
         // restarted by the system.
         mNotificationManager.cancelAll();
     }
 
-    /**
-     * Posts the notification and starts tracking the session to keep it
-     * updated. The notification will automatically be removed if the session is
-     * destroyed before {@link #stopNotification} is called.
-     */
-    public void startNotification() {
-        if (!mStarted) {
-            mMetadata = mController.getMetadata();
-            mPlaybackState = mController.getPlaybackState();
-
-            // The notification must be updated after setting started to true
-            Notification notification = createNotification();
-            if (notification != null) {
-                mController.registerCallback(mCb);
-                IntentFilter filter = new IntentFilter();
-                filter.addAction(ACTION_NEXT);
-                filter.addAction(ACTION_PAUSE);
-                filter.addAction(ACTION_PLAY);
-                filter.addAction(ACTION_PREV);
-                mService.registerReceiver(this, filter);
-
-                mService.startForeground(NOTIFICATION_ID, notification);
-                mStarted = true;
-            }
-        }
-    }
-
-    /**
-     * Removes the notification and stops tracking the session. If the session
-     * was destroyed this has no effect.
-     */
-    public void stopNotification() {
-        if (mStarted) {
-            mStarted = false;
-            mController.unregisterCallback(mCb);
-            try {
-                mNotificationManager.cancel(NOTIFICATION_ID);
-                mService.unregisterReceiver(this);
-            } catch (IllegalArgumentException ex) {
-                // ignore if the receiver is not registered.
-            }
-            mService.stopForeground(true);
-        }
-    }
-
     @Override
     public void onReceive(Context context, Intent intent) {
         final String action = intent.getAction();
-        LogHelper.d(TAG, "Received intent with action " + action);
         switch (action) {
             case ACTION_PAUSE:
-                mTransportControls.pause();
+                mService.mCallback.onPause();
                 break;
             case ACTION_PLAY:
-                mTransportControls.play();
+                mService.mCallback.onPlay();
                 break;
             case ACTION_NEXT:
-                mTransportControls.skipToNext();
+                mService.mCallback.onSkipToNext();
                 break;
-            case ACTION_PREV:
-                mTransportControls.skipToPrevious();
-                break;
-            default:
-                LogHelper.w(TAG, "Unknown intent ignored. Action=", action);
         }
     }
 
-    /**
-     * Update the state based on a change on the session token. Called either when
-     * we are running for the first time or when the media session owner has destroyed the session
-     * (see {@link android.media.session.MediaController.Callback#onSessionDestroyed()})
-     */
-    private void updateSessionToken() {
-        MediaSession.Token freshToken = mService.getSessionToken();
-        if (mSessionToken == null || !mSessionToken.equals(freshToken)) {
-            if (mController != null) {
-                mController.unregisterCallback(mCb);
+    public void update(MediaMetadata metadata, PlaybackState state, MediaSession.Token token) {
+        if (state == null || state.getState() == PlaybackState.STATE_STOPPED ||
+                state.getState() == PlaybackState.STATE_NONE) {
+            mService.stopForeground(true);
+            try {
+                mService.unregisterReceiver(this);
+            } catch (IllegalArgumentException ex) {
+                // ignore receiver not registered
             }
-            mSessionToken = freshToken;
-            mController = new MediaController(mService, mSessionToken);
-            mTransportControls = mController.getTransportControls();
-            if (mStarted) {
-                mController.registerCallback(mCb);
+            mService.stopSelf();
+            return;
+        }
+        if (metadata == null) {
+            return;
+        }
+        boolean isPlaying = state.getState() == PlaybackState.STATE_PLAYING;
+        Notification.Builder notificationBuilder = new Notification.Builder(mService);
+        MediaDescription description = metadata.getDescription();
+
+        notificationBuilder
+                .setStyle(new Notification.MediaStyle()
+                        .setMediaSession(token)
+                        .setShowActionsInCompactView(0, 1))
+                .setColor(mService.getApplication().getResources().getColor(R.color.notification_bg))
+                .setSmallIcon(R.drawable.ic_notification)
+                .setVisibility(Notification.VISIBILITY_PUBLIC)
+                .setContentIntent(createContentIntent())
+                .setContentTitle(description.getTitle())
+                .setContentText(description.getSubtitle())
+                .setLargeIcon(MusicLibrary.getAlbumBitmap(mService, description.getMediaId()))
+                .setOngoing(isPlaying)
+                .setWhen(isPlaying ? System.currentTimeMillis() - state.getPosition() : 0)
+                .setShowWhen(isPlaying)
+                .setUsesChronometer(isPlaying);
+
+        notificationBuilder.addAction(isPlaying ? mPauseAction : mPlayAction);
+
+        // If skip to prev action is enabled
+        if ((state.getActions() & PlaybackState.ACTION_SKIP_TO_NEXT) != 0) {
+            notificationBuilder.addAction(mNextAction);
+        }
+
+        Notification notification = notificationBuilder.build();
+
+        if (isPlaying && !mStarted) {
+            mService.startService(new Intent(mService.getApplicationContext(), MusicService.class));
+            mService.startForeground(NOTIFICATION_ID, notification);
+            mStarted = true;
+        } else {
+            if (!isPlaying) {
+                mService.stopForeground(false);
+                mStarted = false;
             }
+            mNotificationManager.notify(NOTIFICATION_ID, notification);
         }
     }
 
-    private PendingIntent createContentIntent(MediaDescription description) {
-        Intent openUI = new Intent(mService, MainActivity.class);
+    private PendingIntent createContentIntent() {
+        Intent openUI = new Intent(mService, MusicPlayerActivity.class);
         openUI.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
-        openUI.putExtra(MainActivity.EXTRA_START_FULLSCREEN, true);
-        if (description != null) {
-            openUI.putExtra(MainActivity.EXTRA_CURRENT_MEDIA_DESCRIPTION, description);
-        }
         return PendingIntent.getActivity(mService, REQUEST_CODE, openUI,
                 PendingIntent.FLAG_CANCEL_CURRENT);
     }
 
-    private final MediaController.Callback mCb = new MediaController.Callback() {
-        @Override
-        public void onPlaybackStateChanged(@NonNull PlaybackState state) {
-            mPlaybackState = state;
-            LogHelper.d(TAG, "Received new playback state", state);
-            if (state.getState() == PlaybackState.STATE_STOPPED ||
-                    state.getState() == PlaybackState.STATE_NONE) {
-                stopNotification();
-            } else {
-                Notification notification = createNotification();
-                if (notification != null) {
-                    mNotificationManager.notify(NOTIFICATION_ID, notification);
-                }
-            }
-        }
-
-        @Override
-        public void onMetadataChanged(MediaMetadata metadata) {
-            mMetadata = metadata;
-            LogHelper.d(TAG, "Received new metadata ", metadata);
-            Notification notification = createNotification();
-            if (notification != null) {
-                mNotificationManager.notify(NOTIFICATION_ID, notification);
-            }
-        }
-
-        @Override
-        public void onSessionDestroyed() {
-            super.onSessionDestroyed();
-            LogHelper.d(TAG, "Session was destroyed, resetting to the new session token");
-            updateSessionToken();
-        }
-    };
-
-    private Notification createNotification() {
-        LogHelper.d(TAG, "updateNotificationMetadata. mMetadata=" + mMetadata);
-        if (mMetadata == null || mPlaybackState == null) {
-            return null;
-        }
-
-        Notification.Builder notificationBuilder = new Notification.Builder(mService);
-        int playPauseButtonPosition = 0;
-
-        // If skip to previous action is enabled
-        if ((mPlaybackState.getActions() & PlaybackState.ACTION_SKIP_TO_PREVIOUS) != 0) {
-            notificationBuilder.addAction(R.drawable.ic_skip_previous_white_24dp,
-                        mService.getString(R.string.label_previous), mPreviousIntent);
-
-            // If there is a "skip to previous" button, the play/pause button will
-            // be the second one. We need to keep track of it, because the MediaStyle notification
-            // requires to specify the index of the buttons (actions) that should be visible
-            // when in compact view.
-            playPauseButtonPosition = 1;
-        }
-
-        addPlayPauseAction(notificationBuilder);
-
-        // If skip to next action is enabled
-        if ((mPlaybackState.getActions() & PlaybackState.ACTION_SKIP_TO_NEXT) != 0) {
-            notificationBuilder.addAction(R.drawable.ic_skip_next_white_24dp,
-                mService.getString(R.string.label_next), mNextIntent);
-        }
-
-        MediaDescription description = mMetadata.getDescription();
-
-        Bitmap art = null;
-
-        notificationBuilder
-                .setStyle(new Notification.MediaStyle()
-                    .setShowActionsInCompactView(
-                        new int[]{playPauseButtonPosition})  // show only play/pause in compact view
-                    .setMediaSession(mSessionToken))
-                .setColor(mNotificationColor)
-                .setSmallIcon(R.drawable.ic_notification)
-                .setVisibility(Notification.VISIBILITY_PUBLIC)
-                .setUsesChronometer(true)
-                .setContentIntent(createContentIntent(description))
-                .setContentTitle(description.getTitle())
-                .setContentText(description.getSubtitle())
-                .setLargeIcon(art);
-
-
-        setNotificationPlaybackState(notificationBuilder);
-
-        return notificationBuilder.build();
-    }
-
-    private void addPlayPauseAction(Notification.Builder builder) {
-        LogHelper.d(TAG, "updatePlayPauseAction");
-        String label;
-        int icon;
-        PendingIntent intent;
-        if (mPlaybackState.getState() == PlaybackState.STATE_PLAYING) {
-            label = mService.getString(R.string.label_pause);
-            icon = R.drawable.uamp_ic_pause_white_24dp;
-            intent = mPauseIntent;
-        } else {
-            label = mService.getString(R.string.label_play);
-            icon = R.drawable.uamp_ic_play_arrow_white_24dp;
-            intent = mPlayIntent;
-        }
-        builder.addAction(new Notification.Action(icon, label, intent));
-    }
-
-    private void setNotificationPlaybackState(Notification.Builder builder) {
-        LogHelper.d(TAG, "updateNotificationPlaybackState. mPlaybackState=" + mPlaybackState);
-        if (mPlaybackState == null || !mStarted) {
-            LogHelper.d(TAG, "updateNotificationPlaybackState. cancelling notification!");
-            mService.stopForeground(true);
-            return;
-        }
-        if (mPlaybackState.getState() == PlaybackState.STATE_PLAYING
-                && mPlaybackState.getPosition() >= 0) {
-            LogHelper.d(TAG, "updateNotificationPlaybackState. updating playback position to ",
-                    (System.currentTimeMillis() - mPlaybackState.getPosition()) / 1000, " seconds");
-            builder
-                .setWhen(System.currentTimeMillis() - mPlaybackState.getPosition())
-                .setShowWhen(true)
-                .setUsesChronometer(true);
-        } else {
-            LogHelper.d(TAG, "updateNotificationPlaybackState. hiding playback position");
-            builder
-                .setWhen(0)
-                .setShowWhen(false)
-                .setUsesChronometer(false);
-        }
-
-        // Make sure that the notification can be dismissed by the user when we are not playing:
-        builder.setOngoing(mPlaybackState.getState() == PlaybackState.STATE_PLAYING);
-    }
 }
