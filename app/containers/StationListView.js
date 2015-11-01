@@ -40,23 +40,6 @@ const styles = StyleSheet.create({
 
 export const StationListView = connect(store => store.vk)
 (class StationListView extends Component {
-    constructor(...args) {
-        super(...args)
-        this.state = {stations: []}
-    }
-
-    componentDidMount() {
-        vk.getPopular()
-            .then(ids => Promise
-                .all(ids.slice(0, 50)
-                    .map(id =>
-                        vk.getGroupInfo(id, ['photo_200']))))
-            .then(stations => stations.filter(({name}) =>
-            name.trim().toLowerCase() !== 'музыка' &&
-            name.toLowerCase().indexOf('клуб') === -1))
-            .then(stations => this.setState({stations}))
-            .catch(e => console.log(e))
-    }
 
     render() {
         //return <ScrollView contentContainerStyle={styles.container}>
@@ -78,17 +61,19 @@ export const StationListView = connect(store => store.vk)
                         </TouchableOpacity>
                     </View>
                 }
-                {this.state.stations.map(opt => <Station key={opt.id} {...opt}
-                                                         play={id => this.props.openStation(id)}/>)}
+                {this.props.stations
+                    ? this.props.stations.map(opt => <Station key={opt.id} {...opt}
+                                                              play={id => this.props.openStation(id)}/>)
+                    : false}
             </ScrollView>
             {
                 this.props.authorized
                     ? <TouchableOpacity onPress={this.props.openSettings} style={styles.settingsButton}>
-                        <Icon
-                            name='settings'
-                            size={32}
-                            color='white'/>
-                    </TouchableOpacity>
+                    <Icon
+                        name='settings'
+                        size={32}
+                        color='white'/>
+                </TouchableOpacity>
                     : false
             }
         </View>

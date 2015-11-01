@@ -1,8 +1,11 @@
 export async function getGroupWallAttachments (group_id, count = 25) {
-    if (this.sid) {
-        const result = await this.call('wall.get', {owner_id: -group_id, count}, `.items@.attachments
+    if (false) {
+        const result = await this.call('wall.get', {owner_id: -group_id, count}, `.items@.attachments;
 var result2 = [], temp;
-while (result.length) {temp = result.shift();result2.push(temp ? temp@.audio : 0);}
+while (result.length) {
+    temp = result.shift();
+    result2.push(temp ? temp@.audio : 0);
+}
 result = result2;`)
         return result.map(a => (a || []).filter(a => a))
     } else {

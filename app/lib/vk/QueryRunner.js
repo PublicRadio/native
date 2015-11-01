@@ -17,7 +17,7 @@ function generateExecuteCode(queries) {
             .map(q => q.postfix
                 ? `result = ${q.call}${q.postfix};results.push(result);`
                 : `results.push(${q.call});`)
-            .join('') +
+            .join('\n') +
         `return results;`
 }
 
@@ -71,7 +71,8 @@ export class QueryRunner {
             else
                 return Object.assign(new Query('execute', {code: generateExecuteCode(aggregatedQueryStack)}),
                     {
-                        resolve({response}) {
+                        resolve(response) {
+                            console.log(Object.keys(response), response)
                             for (var i = 0; i < response.length; i++)
                                 aggregatedQueryStack[i].resolve(response[i])
                         }

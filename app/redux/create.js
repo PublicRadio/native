@@ -24,4 +24,5 @@ DeviceEventEmitter.addListener('AccessTokenUpdate', (e:Event) => {
     store.dispatch(require('./modules/vk').authorize(!!vk.sid))
 });
 
+store.dispatch(require('./modules/vk').authorize(false))
 store.dispatch(require('./modules/loader').init())

@@ -24,7 +24,7 @@ const vectorCache = fetch('http://publicradio.io/data/result.csv')
     .then(csv => csv.split('\n')
         .map(line => line.split(',').map(entry => Number(entry) || 0))
         .filter(([id]) => id)
-        /*.reduce((map, [id, ...vector]) => map.set(id, vector), new Map())*/)
+        .reduce(({...map, order}, [id, ...vector]) => ({...map, order: [...order, id], [id]: vector}), {order: []}))
 
 
 //noinspection JSUnusedGlobalSymbols
@@ -32,8 +32,8 @@ export async function getPopular() {
     const cache = await vectorCache
     const list = []
     const map = {}
-    for (let [id, ...vector] of cache) {
-        map[id] = vector
+    for (let id of cache.order) {
+        const vector = map[id] = cache[id]
 
         if (Math.min(...list
                 .map(id => findVectorsAngleSin(vector, map[id]))
@@ -41,14 +41,13 @@ export async function getPopular() {
             list.push(id)
     }
 
-    console.log('list', list);
     return list
 }
 
 //noinspection JSUnusedGlobalSymbols
 export async function getRecommended() {
     const cache = await vectorCache
-    const userGroups = new Set(await getFavorites())
+    const userGroups = new Set(await getFavorites.call(this))
     const userGenres = await this.call('audio.get', {count: 1000}, '.items@.genre_id')
     const userVector = []
     for (let item of userGenres)
@@ -60,30 +59,25 @@ export async function getRecommended() {
         if (!userVector[i])
             userVector[i] = 0
     /*todo fix*/
-    for (let [id, vector] of cache)
+    for (let id of Object.keys(cache))
         if (!userGroups.has(id))
-            matchMap.set(id, findVectorsAngleSin(userVector, vector))
+            matchMap.set(id, findVectorsAngleSin(userVector, cache[id]))
 
     const weightKVs = Array.from(matchMap)
     const weightKeys = weightKVs.map(([key, ]) => key)
     const weightValues = weightKVs.map(([, value]) => value)
     const sortedWeightKeys = insertionSort(weightValues, weightKeys)
-    return await sortedWeightKeys.slice(0, recommendedRecommendationsSize)
+    return await sortedWeightKeys.slice(0, 100)
 }
 
-//noinspection JSUnusedGlobalSymbols
 export async function getFavorites() {
     const cache = await vectorCache
     const {items} = await this.getUserGroups()
-    const results = await Promise.all((function* () {
-        for (let group of items)
-            /*todo fix*/
-            yield cache.has(group)
-                ? group
-                : (group => this.getGroupWallAttachments(group)
-                .then(wall => validateWallData(wall) ? group : null))
-            (group)
-    })())
+    const results = await Promise.all(
+        items.map(item => this.getGroupWallAttachments(item)
+            .then(wall => console.log('getting wall data for ' + item) || validateWallData(wall) ? item : null))
+    )
+    console.log('items@@@@results', results);
     return results.filter(a => a)
 }
 
