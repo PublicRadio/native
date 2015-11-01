@@ -1,5 +1,5 @@
 import * as playerActions from '../redux/modules/player'
-import {PlayPauseButton, NextTrackButton, LoginButton} from '../components/index'
+import {LikeButton, NextTrackButton, LoginButton, PlayPauseButton} from '../components/index'
 import React, {Component, StyleSheet, View, Text, NativeModules, Image, Dimensions} from 'react-native'
 import {connect} from 'react-redux/native'
 import {vk} from '../lib/index'
@@ -43,7 +43,9 @@ const styles = StyleSheet.create({
     },
     contentButtons: {
         flexDirection: 'row',
-        justifyContent: 'center',
+        width: Dimensions.get('window').width,
+        justifyContent: 'space-around',
+        padding: 16,
         alignItems: 'center',
     }
 })
@@ -52,10 +54,11 @@ export const PlayerView = connect(state => state.player, playerActions)
 (class PlayerView extends Component {
     constructor(...args) {
         super(...args)
-        this.state = {}
+        this.state = {id: 0}
         this.loader = vk.getGroupTrackList(this.props.station)
+
         vk.getGroupInfo(this.props.station, ['photo_200'])
-            .then(info => console.log(info) || this.setState(info))
+            .then(info => setTimeout(() => this.setState(info), 0))
     }
 
     render() {
@@ -67,9 +70,9 @@ export const PlayerView = connect(state => state.player, playerActions)
                     <Image source={{uri: photo_200 }} style={styles.contentImage}/>
                 </View>
                 <View style={styles.content}>
-                    {/*<LoginButton onPress={() => NativeModules.VKInterface.login()}/>*/}
                     <Text>Some Text</Text>
                     <View style={styles.contentButtons}>
+                        <LikeButton onPress={() => NativeModules.VKInterface.login()}/>
                         <PlayPauseButton mode={this.props.mode} onPress={this.props.toggleButton}/>
                         <NextTrackButton onPress={this.props.nextTrackButtonClick}/>
                     </View>

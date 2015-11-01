@@ -4,7 +4,7 @@ import {PlayerView} from './PlayerView'
 import {SettingsView} from './SettingsView'
 import {connect} from 'react-redux/native'
 
-export const ApplicationContainer = connect(store => store.navigator)
+export const ApplicationContainer =
 (class ApplicationContainer extends Component {
     componentDidMount() {
         BackAndroid.addEventListener('hardwareBackPress', () => this.goBack());
@@ -17,7 +17,7 @@ export const ApplicationContainer = connect(store => store.navigator)
                 case index === 0:
                     return <StationListView
                         stations={this.props.opts}
-                        openSettings={stationId => navigator.push({index: index + 1, type: 'settings'})}
+                        openSettings={() => navigator.push({index: index + 1, type: 'settings'})}
                         openStation={stationId => navigator.push({index: index + 1, type: 'player', stationId})}/>
                 case type === 'player':
                     return <PlayerView {...this.props.opts}
