@@ -22,6 +22,7 @@ import android.media.session.MediaController;
 import android.media.session.PlaybackState;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.util.Log;
 import android.view.KeyEvent;
 import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
@@ -38,6 +39,7 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
     private MediaBrowser mMediaBrowser;
+    public static MainActivity mainActivity;
 
     private final MediaBrowser.ConnectionCallback mConnectionCallback =
             new MediaBrowser.ConnectionCallback() {
@@ -46,12 +48,11 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
                     mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mSubscriptionCallback);
                     MediaController mediaController = new MediaController(
                             MainActivity.this, mMediaBrowser.getSessionToken());
-                    updatePlaybackState(mediaController.getPlaybackState());
+
                     updateMetadata(mediaController.getMetadata());
                     mediaController.registerCallback(mMediaControllerCallback);
                     setMediaController(mediaController);
-
-                    getMediaController().getTransportControls().playFromMediaId("Jazz_In_Paris", null);
+//                    getMediaController().getTransportControls().playFromMediaId("Jazz_In_Paris", null);
                 }
             };
 
@@ -65,12 +66,12 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
 
         @Override
         public void onPlaybackStateChanged(PlaybackState state) {
-            updatePlaybackState(state);
+            BackgroundPlayer.backgroundPlayer.updatePlaybackState(state);
         }
 
         @Override
         public void onSessionDestroyed() {
-            updatePlaybackState(null);
+            BackgroundPlayer.backgroundPlayer.updatePlaybackState(null);
         }
     };
 
@@ -102,6 +103,7 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
         mReactRootView.startReactApplication(mReactInstanceManager, "PublicRadioNative", null);
 
         setContentView(mReactRootView);
+        mainActivity = this;
     }
 
     @Override
@@ -149,8 +151,7 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
     public void onStart() {
         super.onStart();
 
-        mMediaBrowser = new MediaBrowser(this,
-               new ComponentName(this, MusicService.class), mConnectionCallback, null);
+        mMediaBrowser = new MediaBrowser(this, new ComponentName(this, MusicService.class), mConnectionCallback, null);
         mMediaBrowser.connect();
     }
 
@@ -160,49 +161,18 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
         try {
             getMediaController().unregisterCallback(mMediaControllerCallback);
             mMediaBrowser.unsubscribe(mMediaBrowser.getRoot());
-        } finally {
+        } catch(Exception ex){
+            Log.e("MainActivity", ex.toString());
+        }
+        finally {
             mMediaBrowser.disconnect();
         }
     }
 
-    private void updatePlaybackState(PlaybackState state) {
-//        if (state == null || state.getState() == PlaybackState.STATE_PAUSED ||
-//                state.getState() == PlaybackState.STATE_STOPPED) {
-//            mPlayPause.setImageDrawable(getDrawable(R.drawable.ic_play_arrow_black_36dp));
-//        } else {
-//            mPlayPause.setImageDrawable(getDrawable(R.drawable.ic_pause_black_36dp));
-//        }
-//        mPlaybackControls.setVisibility(state == null ? View.GONE : View.VISIBLE);
-    }
-
     private void updateMetadata(MediaMetadata metadata) {
-
 //        mTitle.setText(metadata == null ? "" : metadata.getDescription().getTitle());
 //        mSubtitle.setText(metadata == null ? "" : metadata.getDescription().getSubtitle());
 //        mAlbumArt.setImageBitmap(metadata == null ? null : MusicLibrary.getAlbumBitmap(this,
 //                metadata.getDescription().getMediaId()));
     }
-
-//    private final View.OnClickListener mPlaybackButtonListener = new View.OnClickListener() {
-//        @Override
-//        public void onClick(View v) {
-//            final int state = mCurrentState == null ?
-//                    PlaybackState.STATE_NONE : mCurrentState.getState();
-//            if (state == PlaybackState.STATE_PAUSED ||
-//                    state == PlaybackState.STATE_STOPPED ||
-//                    state == PlaybackState.STATE_NONE) {
-//
-//                if (mCurrentMetadata == null) {
-//                    mCurrentMetadata = MusicLibrary.getMetadata(MainActivity.this,
-//                            MusicLibrary.getMediaItems().get(0).getMediaId());
-//                    updateMetadata(mCurrentMetadata);
-//                }
-//                getMediaController().getTransportControls().playFromMediaId(
-//                        mCurrentMetadata.getDescription().getMediaId(), null);
-//
-//            } else {
-//                getMediaController().getTransportControls().pause();
-//            }
-//        }
-//    };
 }

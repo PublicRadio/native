@@ -4,6 +4,8 @@ import React, {Component, StyleSheet, View, Text, NativeModules, Image, Dimensio
 import {connect} from 'react-redux/native'
 import {vk} from '../lib/index'
 
+const {MusicLibrary} = NativeModules
+
 const styles = StyleSheet.create({
     container: {
         flexDirection: 'row',
@@ -54,8 +56,7 @@ export const PlayerView = connect(state => state.player, playerActions)
 (class PlayerView extends Component {
     constructor(...args) {
         super(...args)
-        this.state = {id: 0}
-        this.loader = vk.getGroupTrackList(this.props.station)
+        this.state = {};
 
         vk.getGroupInfo(this.props.station, ['photo_200'])
             .then(info => setTimeout(() => this.setState(info), 0))

@@ -13,9 +13,8 @@ import java.util.List;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 public class MusicService extends MediaBrowserService {
-
     private MediaSession mSession;
-    private PlaybackManager mPlayback;
+    public static PlaybackManager mPlayback;
 
     final MediaSession.Callback mCallback = new MediaSession.Callback() {
         @Override
