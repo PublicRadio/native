@@ -61,7 +61,6 @@ public class MusicService extends MediaBrowserService {
 
         final MediaNotificationManager mediaNotificationManager = new MediaNotificationManager(this);
 
-
         mPlayback = new PlaybackManager(this, new PlaybackManager.Callback() {
             @Override
             public void onPlaybackStatusChanged(PlaybackState state) {

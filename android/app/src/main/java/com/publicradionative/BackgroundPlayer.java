@@ -27,7 +27,10 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void setTrackList(ReadableArray items) {
-        try { MusicLibrary.SetFromReadableArray(items); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+        try {
+            MusicLibrary.SetFromReadableArray(items);
+            setNextTrack();
+        } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }
 
     @ReactMethod
@@ -38,6 +41,7 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         if(nextTrack == null){
             return;
         }
+        stop();
         MainActivity.mainActivity.getMediaController().getTransportControls().playFromMediaId(nextTrack, null);
     }
 
