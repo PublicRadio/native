@@ -40,7 +40,6 @@ export const goto = wrapActionCreator((pageType, pageData) => (dispatch) => {
                 .catch(e => console.log(e))
             break;
     }
-
 })
 
 export default handleActions({

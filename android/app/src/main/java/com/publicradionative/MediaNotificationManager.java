@@ -63,7 +63,6 @@ public class MediaNotificationManager extends BroadcastReceiver {
 
         mService.registerReceiver(this, filter);
 
-
         mNotificationManager = (NotificationManager) mService
                 .getSystemService(Context.NOTIFICATION_SERVICE);
 

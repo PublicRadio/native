@@ -5,13 +5,17 @@ import android.net.Uri;
 import com.facebook.react.bridge.ReadableMap;
 
 public class AudioTrack {
-    Uri uri;
-    String artist;
-    String title;
+    public String uri;
+    public String artist;
+    public String title;
+    public Integer id;
+    public Long duration;
 
     public AudioTrack(ReadableMap trackInfo) {
-        uri = Uri.parse(trackInfo.getString("uri"));
+        uri = trackInfo.getString("uri");
         artist = trackInfo.getString("artist");
         title = trackInfo.getString("title");
+        duration = (long) trackInfo.getInt("duration");
+        id = trackInfo.getInt("id");
     }
 }
