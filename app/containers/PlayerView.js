@@ -4,7 +4,7 @@ import React, {Component, StyleSheet, View, Text, NativeModules, Image, Dimensio
 import {connect} from 'react-redux/native'
 import {vk} from '../lib/index'
 
-const {MusicLibrary} = NativeModules
+const {BackgroundPlayer} = NativeModules;
 
 const styles = StyleSheet.create({
     container: {
@@ -57,9 +57,16 @@ export const PlayerView = connect(state => state.player, playerActions)
     constructor(...args) {
         super(...args)
         this.state = {};
+    }
 
+    componentDidMount(){
         vk.getGroupInfo(this.props.station, ['photo_200'])
             .then(info => setTimeout(() => this.setState(info), 0))
+
+        vk.getGroupTrackList(this.props.station)
+        .then((tracks)=>{
+            BackgroundPlayer.setTrackList(tracks);
+        })
     }
 
     render() {
@@ -71,9 +78,8 @@ export const PlayerView = connect(state => state.player, playerActions)
                     <Image source={{uri: photo_200 }} style={styles.contentImage}/>
                 </View>
                 <View style={styles.content}>
-                    <Text>Some Text</Text>
+                    <Text>{name}</Text>
                     <View style={styles.contentButtons}>
-                        <LikeButton onPress={() => NativeModules.VKInterface.login()}/>
                         <PlayPauseButton mode={this.props.mode} onPress={this.props.toggleButton}/>
                         <NextTrackButton onPress={this.props.nextTrackButtonClick}/>
                     </View>
@@ -84,3 +90,5 @@ export const PlayerView = connect(state => state.player, playerActions)
         }
     }
 })
+
+// <LikeButton onPress={() => NativeModules.VKInterface.login()}/>

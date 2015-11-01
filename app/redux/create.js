@@ -17,8 +17,14 @@ const finalCreateStore = compose(
 
 export const store = finalCreateStore(reducer);
 
-DeviceEventEmitter.addListener('ReduxAction', (e:Event) =>
-    store.dispatch(nativeActions[e.actionName](e.payload)));
+DeviceEventEmitter.addListener('ReduxAction', (e:Event) => {
+    console.log(e.actionName);
+    if(!nativeActions[e.actionName]) {
+      return;
+    }
+    
+    store.dispatch(nativeActions[e.actionName](e.payload));
+});
 DeviceEventEmitter.addListener('AccessTokenUpdate', (e:Event) => {
     vk.sid = e.token
     store.dispatch(require('./modules/vk').authorize(!!vk.sid))

@@ -170,6 +170,10 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
     }
 
     private void updateMetadata(MediaMetadata metadata) {
+        if(metadata == null){
+            return;
+        }
+//        Log.d("####", metadata.getDescription().getMediaId());
 //        mTitle.setText(metadata == null ? "" : metadata.getDescription().getTitle());
 //        mSubtitle.setText(metadata == null ? "" : metadata.getDescription().getSubtitle());
 //        mAlbumArt.setImageBitmap(metadata == null ? null : MusicLibrary.getAlbumBitmap(this,

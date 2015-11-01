@@ -28,6 +28,7 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     @ReactMethod
     public void setTrackList(ReadableArray items) {
         try {
+            stop();
             MusicLibrary.SetFromReadableArray(items);
             setNextTrack();
         } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }

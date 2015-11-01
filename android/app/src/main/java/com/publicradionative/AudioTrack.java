@@ -12,7 +12,7 @@ public class AudioTrack {
     public Long duration;
 
     public AudioTrack(ReadableMap trackInfo) {
-        uri = trackInfo.getString("uri");
+        uri = trackInfo.getString("url");
         artist = trackInfo.getString("artist");
         title = trackInfo.getString("title");
         duration = (long) trackInfo.getInt("duration");
