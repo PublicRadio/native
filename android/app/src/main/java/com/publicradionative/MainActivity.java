@@ -35,11 +35,10 @@ import java.util.List;
 /**
  * An Activity to browse and play media.
  */
-public class MainActivity extends AppCompatActivity  implements DefaultHardwareBackBtnHandler {
+public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler {
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
     private MediaBrowser mMediaBrowser;
-    public static MainActivity mainActivity;
 
     private final MediaBrowser.ConnectionCallback mConnectionCallback =
             new MediaBrowser.ConnectionCallback() {
@@ -52,7 +51,6 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
                     updateMetadata(mediaController.getMetadata());
                     mediaController.registerCallback(mMediaControllerCallback);
                     setMediaController(mediaController);
-//                    getMediaController().getTransportControls().playFromMediaId("Jazz_In_Paris", null);
                 }
             };
 
@@ -103,7 +101,6 @@ public class MainActivity extends AppCompatActivity  implements DefaultHardwareB
         mReactRootView.startReactApplication(mReactInstanceManager, "PublicRadioNative", null);
 
         setContentView(mReactRootView);
-        mainActivity = this;
     }
 
     @Override

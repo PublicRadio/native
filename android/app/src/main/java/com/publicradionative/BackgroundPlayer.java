@@ -1,5 +1,6 @@
 package com.publicradionative;
 
+import android.app.Activity;
 import android.media.session.PlaybackState;
 import android.util.Log;
 import com.facebook.react.bridge.ReactApplicationContext;
@@ -9,17 +10,18 @@ import com.facebook.react.bridge.ReadableArray;
 import java.util.ArrayList;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
-    ReactApplicationContext context;
-    ArrayList<AudioTrack> tracks = new ArrayList<>();
+    private ReactApplicationContext context;
+    private Activity currentActivity;
     public static BackgroundPlayer backgroundPlayer;
     private static final String TAG = "BackgroundPlayer";
 
-    public BackgroundPlayer(ReactApplicationContext reactContext) {
+    public BackgroundPlayer(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
+        currentActivity = activity;
         context = reactContext;
         backgroundPlayer = this;
 
-//        updatePlaybackState(MainActivity.mainActivity.getMediaController().getPlaybackState());
+//        updatePlaybackState(currentActivity.getMediaController().getPlaybackState());
     }
 
     @Override
@@ -43,22 +45,22 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
             return;
         }
         stop();
-        MainActivity.mainActivity.getMediaController().getTransportControls().playFromMediaId(nextTrack, null);
+        currentActivity.getMediaController().getTransportControls().playFromMediaId(nextTrack, null);
     }
 
     @ReactMethod
     public void play() {
-        try { MainActivity.mainActivity.getMediaController().getTransportControls().play(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+        try { currentActivity.getMediaController().getTransportControls().play(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }
 
     @ReactMethod
     public void stop() { 
-        try { MainActivity.mainActivity.getMediaController().getTransportControls().stop(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+        try { currentActivity.getMediaController().getTransportControls().stop(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }
 
     @ReactMethod
     public void pause() { 
-        try { MainActivity.mainActivity.getMediaController().getTransportControls().pause(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+        try { currentActivity.getMediaController().getTransportControls().pause(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
     }
 
     private void dispatchReduxUpdatePlaybackState(String eventName) {

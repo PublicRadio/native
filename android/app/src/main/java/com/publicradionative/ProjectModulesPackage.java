@@ -11,7 +11,7 @@ import java.util.Collections;
 import java.util.List;
 
 public class ProjectModulesPackage implements ReactPackage {
-    Activity currentActivity;
+    private Activity currentActivity;
     public ProjectModulesPackage(Activity activity) {
         currentActivity = activity;
     }
@@ -19,7 +19,7 @@ public class ProjectModulesPackage implements ReactPackage {
     @Override
     public List<NativeModule> createNativeModules(ReactApplicationContext reactContext) {
         List<NativeModule> modules = new ArrayList<>();
-        modules.add(new BackgroundPlayer(reactContext));
+        modules.add(new BackgroundPlayer(reactContext, currentActivity));
         modules.add(new LinkOpener(reactContext));
         modules.add(new VKInterface(reactContext, currentActivity));
         DefaultApplication application = (DefaultApplication)currentActivity.getApplication();
