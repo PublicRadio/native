@@ -12,8 +12,6 @@ import * as wall from './extensions/wall'
  * @method VK.logout
  * */
 export class VK {
-
-
     /**
      * VK Constructor
      * @constructs VK
@@ -21,10 +19,10 @@ export class VK {
     constructor() { this.queryRunner = new QueryRunner() }
 
     /** @private */
-    get sid() {return this._sid}
+    get sid() { return this._sid }
 
     /** @private */
-    set sid(val) {this.queryRunner.access_token = this._sid = val}
+    set sid(val) { this.queryRunner.access_token = this._sid = val }
 
     /**
      * VK Api request smart wrapper
@@ -32,9 +30,11 @@ export class VK {
      * @param {object=} opts - request opts
      * @param {string=} postfix - optional reducer for "execute" method
      * */
-    call(method, opts, postfix) {return this.queryRunner.addQuery(method, opts, postfix)}
+    call(method, opts, postfix) { return this.queryRunner.addQuery(method, opts, postfix) }
 }
 
-for (let pkg of [adviceDog, groupsAndUsers, wall])
-    for (let key of Object.keys(pkg))
+for (let pkg of [adviceDog, groupsAndUsers, wall]) {
+    for (let key of Object.keys(pkg)) {
         VK.prototype[key] = pkg[key]
+    }
+}

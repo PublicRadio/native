@@ -5,7 +5,7 @@ import {vk} from '../../lib/index'
 const {BackgroundPlayer} = NativeModules
 
 export const authorize = (authorized) => dispatcher => {
-    dispatcher(createAction('VK_STATECHANGE')({authorized}));
+    dispatcher(createAction('VK_STATE_CHANGE')({authorized}));
 
     (authorized
         ? vk.getFavorites()
@@ -16,13 +16,12 @@ export const authorize = (authorized) => dispatcher => {
             stations.filter(({name}) =>
             name.trim().toLowerCase() !== 'музыка' &&
             name.toLowerCase().indexOf('клуб') === -1))
-        .then(stations => dispatcher(createAction('VK_STATIONSCHANGE')(stations)))
+        .then(stations => dispatcher(createAction('VK_STATIONS_CHANGE')(stations)))
         .catch(e => console.error(e, 'stack err'))
 }
 
-
 export default handleActions({
-        'VK_STATECHANGE': (state, {payload:{authorized}}) => ({...state, authorized, stations: []}),
-        'VK_STATIONSCHANGE': (state, {payload:stations}) => ({...state, stations})
+        'VK_STATE_CHANGE': (state, {payload:{authorized}}) => ({...state, authorized, stations: []}),
+        'VK_STATIONS_CHANGE': (state, {payload:stations}) => ({...state, stations})
     },
     {authorized: false, stations: []})

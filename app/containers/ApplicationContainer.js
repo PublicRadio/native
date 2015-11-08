@@ -11,21 +11,23 @@ export const ApplicationContainer =
     }
 
     render() {
-        const renderScene = ({index,stationId,type}, navigator) => {
+        const {opts} = this.props;
+
+        const renderScene = ({index, stationId, type}, navigator) => {
             this.goBack = () => index > 0 ? navigator.pop() || true : false
+            
             switch (true) {
                 case index === 0:
-                    return <StationListView
-                        stations={this.props.opts}
-                        openSettings={() => navigator.push({index: index + 1, type: 'settings'})}
-                        openStation={stationId => navigator.push({index: index + 1, type: 'player', stationId})}/>
+                    return <StationListView stations={opts}
+                                            openSettings={() => navigator.push({index: index + 1, type: 'settings'})}
+                                            openStation={stationId => navigator.push({index: index + 1, type: 'player', stationId})}/>
                 case type === 'player':
-                    return <PlayerView {...this.props.opts}
-                        station={stationId}
-                        onBack={() => {if (index > 0) { navigator.pop(); }}}/>
+                    return <PlayerView {...opts}
+                                       station={stationId}
+                                       onBack={() => {if (index > 0) { navigator.pop(); }}}/>
                 case type === 'settings':
-                    return <SettingsView {...this.props.opts}
-                        onBack={() => {if (index > 0) { navigator.pop(); }}}/>
+                    return <SettingsView {...opts}
+                                         onBack={() => {if (index > 0) { navigator.pop(); }}}/>
                 default:
                     console.error ('unknown page type', type)
             }

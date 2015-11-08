@@ -1,1 +1,0 @@
-export const apiMiddleware = require('./apiMiddleware')

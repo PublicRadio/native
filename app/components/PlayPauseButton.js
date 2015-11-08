@@ -20,11 +20,11 @@ const styles = StyleSheet.create({
 
 export default class PlayPauseButton extends Component {
     render() {
-        const {mode} = this.props
+        const {mode, onPress} = this.props
         const isPaused = mode === 'paused' || mode === 'stopped'
         const iconName = isPaused ? 'play-arrow' : 'pause'
 
-        return <TouchableOpacity onPress={this.props.onPress}>
+        return <TouchableOpacity onPress={onPress}>
             <Icon
                 name={iconName}
                 size={30}

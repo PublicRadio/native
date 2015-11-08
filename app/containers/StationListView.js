@@ -24,7 +24,6 @@ const styles = StyleSheet.create({
         paddingRight: 8,
         backgroundColor: 'black',
         transform: [
-
             {
                 translateX: -8
             },
@@ -46,36 +45,39 @@ export const StationListView = connect(store => store.vk)
         //    {this.state.stations.map(opt => <Station key={opt.id} {...opt}
         //                                             play={id => this.props.openStation(id)}/>)}
         //</ScrollView>
-        return <View>
+
+        const {openStation, openSettings, authorized, stations, login} = this.props;
+
+        return (<View>
             <ScrollView style={styles.scroller} contentContainerStyle={styles.container}>
                 {
-                    this.props.authorized
-                        ? false
-                        : <View style={{backgroundColor: 'white'}}>
-                        <Text style={{textAlign: 'center'}}>
-                            Авторизуйтесь, чтобы иметь возможность добавлять аудиозаписи в избранное и получать персональные рекомендации
-                        </Text>
-                        <TouchableOpacity onPress={() => NativeModules.VKInterface.login()}
-                                          style={{width: Dimensions.get('window').width}}>
-                            <Text style={{textAlign: 'center', color: 'black', backgroundColor: '#ccc'}}>Войти</Text>
-                        </TouchableOpacity>
-                    </View>
+                    authorized
+                    ? false
+                    : (<View style={{backgroundColor: 'white'}}>
+                            <Text style={{textAlign: 'center'}}>
+                                Авторизуйтесь, чтобы иметь возможность добавлять аудиозаписи в избранное и получать персональные рекомендации
+                            </Text>
+                            <TouchableOpacity onPress={login}
+                                              style={{width: Dimensions.get('window').width}}>
+                                <Text style={{textAlign: 'center', color: 'black', backgroundColor: '#ccc'}}>Войти</Text>
+                            </TouchableOpacity>
+                       </View>)
                 }
-                {this.props.stations
-                    ? this.props.stations.map(opt => <Station key={opt.id} {...opt}
-                                                              play={id => this.props.openStation(id)}/>)
-                    : false}
+                {   
+                    stations
+                    ? stations.map(opt => <Station key={opt.id} {...opt} play={id => openStation(id)}/>)
+                    : false
+                }
             </ScrollView>
             {
-                this.props.authorized
-                    ? <TouchableOpacity onPress={this.props.openSettings} style={styles.settingsButton}>
-                    <Icon
-                        name='settings'
-                        size={32}
-                        color='white'/>
-                </TouchableOpacity>
-                    : false
+                authorized
+                ? (<TouchableOpacity onPress={openSettings} style={styles.settingsButton}>
+                        <Icon name='settings'
+                              size={32}
+                              color='white'/>
+                    </TouchableOpacity>)
+                : false
             }
-        </View>
+        </View>)
     }
 })

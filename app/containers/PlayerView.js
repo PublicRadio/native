@@ -52,27 +52,29 @@ const styles = StyleSheet.create({
     }
 })
 
-export const PlayerView = connect(state => state.player, playerActions)
+export default const PlayerView = connect(
+    ({vk, currentTrack, tracks}) => (
+        {
+            vk, 
+            liked:tracks[currentTrack].liked
+            groupInfo,
+            station
+        }
+    ), playerActions
+)
 (class PlayerView extends Component {
-    constructor(...args) {
-        super(...args)
-        this.state = {};
-    }
-
     componentDidMount(){
-        vk.getGroupInfo(this.props.station, ['photo_200'])
-            .then(info => setTimeout(() => this.setState(info), 0))
-
-        vk.getGroupTrackList(this.props.station)
-        .then((tracks)=>{
-            BackgroundPlayer.setTrackList(tracks);
-        })
+        this.props.openPlayer(this.props.station);
     }
 
     render() {
-        const {name = '', screen_name = '', photo_200 = '', id } = this.state
-        if (id) {
-            return <View style={styles.container}>
+        const {nextTrackButtonClick, mode, toggleButton, groupInfo, liked, like} = this.props;
+        const {name = '', screen_name = '', photo_200 = '', id } = groupInfo;
+        if (!id) {
+            return false
+        }
+        return (
+            <View style={styles.container}>
                 <Image source={{uri: photo_200 }} style={styles.background}/>
                 <View style={styles.contentImageContainer}>
                     <Image source={{uri: photo_200 }} style={styles.contentImage}/>
@@ -80,15 +82,20 @@ export const PlayerView = connect(state => state.player, playerActions)
                 <View style={styles.content}>
                     <Text>{name}</Text>
                     <View style={styles.contentButtons}>
-                        <PlayPauseButton mode={this.props.mode} onPress={this.props.toggleButton}/>
-                        <NextTrackButton onPress={this.props.nextTrackButtonClick}/>
+                        <LikeButton onPress={like} liked={liked}/>
+                        <PlayPauseButton mode={mode} onPress={toggleButton}/>
+                        <NextTrackButton onPress={nextTrackButtonClick}/>
                     </View>
                 </View>
-            </View>
-        } else {
-            return false
-        }
+            </View>)
     }
 })
 
-// <LikeButton onPress={() => NativeModules.VKInterface.login()}/>
+// vk.getGroupTrackList(this.props.station)
+//         .then((tracks)=>{
+//             BackgroundPlayer.setTrackList(tracks);
+//         })
+
+  // vk.getGroupInfo(this.props.station, ['photo_200'])
+  //           .then(info => setTimeout(() => this.setState(info), 0))
+

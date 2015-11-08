@@ -38,7 +38,8 @@ const styles = StyleSheet.create({
 
 export default class Station extends Component {
     render() {
-        const {name, screen_name, photo_200, id, play} = this.props
+        const {name, screen_name, photo_200, id, play} = this.props;
+        
         return <TouchableOpacity onPress={() => play(id)} style={[styles.container]}>
             <Image source={{uri: photo_200}} style={[styles.image]}/>
             <View style={styles.description}>

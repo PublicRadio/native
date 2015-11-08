@@ -1,29 +1,29 @@
-import createLoadableResource from './loadable' 
-import {CALL_API} from '../middleware/apiMiddleware' 
-
-const resourceName = 'tracks';
-
-const {isLoaded:_isLoaded, reducer, actions} = createLoadableResource(resourceName);
-
-export default reducer;
-export const isLoaded = _isLoaded;
-
-/**
- * Load available spaces for this user
- */
-export function load() {
-  return {
-    [CALL_API]:
-    {
-      types: actions,
-      promise: () =>
-	      fetch('https://api.vk.com/method/wall.get?domain=acoustic__music&v=5.25&count=500')
-            .then(result => result.json())
-            .then(({response}) => response.items
-                .reduce((acc, {attachments = []}) =>
-                    [...acc, ...attachments.map(({audio}) => audio).filter(a => a)], []))
-            .then(tracks => tracks.map(({url, ...track}) => ({uri: url, ...track})))
-            .catch(console.error.bind(console))
-    }
-  }
+async function likeTrack (track, station) {
+    const albums = await vk.call('audio.getAlbums', {offset: 0, count: 100}, '.items');
+    const currentAlbumTitle = 'publicRadio.io // ' + station.name + ' (' + station.screen_name + ')';
+    const albumRegex = new RegExp(`^publicRadio.io \/\/.*\(${station.screen_name}\)$`, 'img');
+    const currentAlbum = albums.filter(album => albumRegex.test(album.title))[0];
+    const album_id = (currentAlbum ? currentAlbum : await vk.call('audio.addAlbum', {title: currentAlbumTitle})).album_id;
+    var audio_id = await vk.call('audio.add', {audio_id: track.id, owner_id: track.owner_id});
+    await Promise.all([
+        vk.call('audio.moveToAlbum', {album_id, audio_ids: audio_id}),
+        vk.call('audio.edit', {
+            owner_id: vk.user.id,
+            audio_id,
+            title: track.title + ' (найдено на PublicRadio.io)'
+        })
+    ]);
 }
+
+const like = (item, isLike) => 
+  item.like = isLike;
+  return item;
+
+const applyFuncToItem = (func)=>(item)=>
+  return func(item);
+
+export default handleActions({
+   'LIKE_TRACK' : (state, {id}}) => ,
+   'SET_TRACKS' : (state, payload) => ,
+   'CLEAR_TRACKS' : (state) => ({}),
+}, {})

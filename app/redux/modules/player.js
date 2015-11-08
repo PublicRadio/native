@@ -13,16 +13,15 @@ export const nextTrackButtonClick = () => (dispatch) => {
     }
 
 export const toggleButton = () => (dispatch, getState) => {
-        const {player} = getState()
-        switch (player.mode) {
+        const {player:{mode}} = getState()
+        switch (mode) {
             case 'paused':
                 BackgroundPlayer.play()
-            dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}))
+                dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}))
                 return
             case 'stopped':
                 BackgroundPlayer.setNextTrack()
                 BackgroundPlayer.play()
-
                 dispatch(createAction('SET_PLAYER_STATE')({mode: 'playing'}))
                 return
             default:
@@ -35,7 +34,6 @@ export const toggleButton = () => (dispatch, getState) => {
 export default handleActions({
         'SET_PLAYER_STATE': (state, {payload:{mode}})=> ({...state, mode}),
         'TRACKS_LOADED': (state, {payload:{tracks}})=> {
-            BackgroundPlayer.setTrackList(tracks);
             return {...state, tracks};
         }
     }, {mode: 'stopped'})

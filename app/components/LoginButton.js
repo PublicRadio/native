@@ -20,9 +20,9 @@ const styles = StyleSheet.create({
 
 export default class LoginButton extends Component {
     render() {
-        const {mode} = this.props
+        const {mode, onPress} = this.props
 
-        return <TouchableOpacity onPress={this.props.onPress}>
+        return <TouchableOpacity onPress={onPress}>
             <Icon
                 name='accessibility'
                 size={90}
