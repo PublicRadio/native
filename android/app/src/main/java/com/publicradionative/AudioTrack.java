@@ -1,7 +1,5 @@
 package com.publicradionative;
 
-import android.net.Uri;
-
 import com.facebook.react.bridge.ReadableMap;
 
 public class AudioTrack {
