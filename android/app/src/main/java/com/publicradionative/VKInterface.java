@@ -1,16 +1,12 @@
 package com.publicradionative;
 
-import com.facebook.react.bridge.Callback;
-import com.vk.sdk.VKAccessToken;
-import com.vk.sdk.VKSdk;
-
 import android.app.Activity;
 import android.content.Context;
 
-import com.facebook.react.bridge.NativeModule;
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
+import com.vk.sdk.VKSdk;
 
 /**
  * Created by vrodionov on 10/31/15.

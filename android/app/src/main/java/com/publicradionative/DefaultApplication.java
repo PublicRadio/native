@@ -3,15 +3,9 @@ package com.publicradionative;
 import android.app.Application;
 import android.util.Log;
 
-import com.facebook.react.bridge.Arguments;
-import com.facebook.react.bridge.ReactContext;
-import com.facebook.react.bridge.WritableMap;
-import com.facebook.react.modules.core.DeviceEventManagerModule;
-import com.vk.sdk.VKSdk;
-import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKAccessToken;
-
-import javax.annotation.Nullable;
+import com.vk.sdk.VKAccessTokenTracker;
+import com.vk.sdk.VKSdk;
 
 
 public class DefaultApplication extends Application {

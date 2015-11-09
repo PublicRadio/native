@@ -8,7 +8,9 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 public class TokenCallback {
     ReactApplicationContext context;
 
-    public TokenCallback(ReactApplicationContext ctx) {context = ctx;}
+    public TokenCallback(ReactApplicationContext ctx) {
+        context = ctx;
+    }
 
     private void sendEvent(String eventName, WritableMap params) {
         context

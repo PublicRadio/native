@@ -24,36 +24,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.KeyEvent;
+
 import com.facebook.react.LifecycleState;
 import com.facebook.react.ReactInstanceManager;
 import com.facebook.react.ReactRootView;
 import com.facebook.react.modules.core.DefaultHardwareBackBtnHandler;
 import com.facebook.react.shell.MainReactPackage;
 import com.oblador.vectoricons.VectorIconsPackage;
+
 import java.util.List;
 
 /**
  * An Activity to browse and play media.
  */
 public class MainActivity extends AppCompatActivity implements DefaultHardwareBackBtnHandler {
-    private ReactInstanceManager mReactInstanceManager;
-    private ReactRootView mReactRootView;
-    private MediaBrowser mMediaBrowser;
-
-    private final MediaBrowser.ConnectionCallback mConnectionCallback =
-            new MediaBrowser.ConnectionCallback() {
-                @Override
-                public void onConnected() {
-                    mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mSubscriptionCallback);
-                    MediaController mediaController = new MediaController(
-                            MainActivity.this, mMediaBrowser.getSessionToken());
-
-                    updateMetadata(mediaController.getMetadata());
-                    mediaController.registerCallback(mMediaControllerCallback);
-                    setMediaController(mediaController);
-                }
-            };
-
     // Receive callbacks from the MediaController. Here we update our state such as which queue
     // is being shown, the current title and description and the PlaybackState.
     private final MediaController.Callback mMediaControllerCallback = new MediaController.Callback() {
@@ -72,14 +56,28 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             BackgroundPlayer.backgroundPlayer.updatePlaybackState(null);
         }
     };
-
     private final MediaBrowser.SubscriptionCallback mSubscriptionCallback =
-        new MediaBrowser.SubscriptionCallback() {
-            @Override
-            public void onChildrenLoaded(String parentId, List<MediaBrowser.MediaItem> children) {
-            }
-        };
+            new MediaBrowser.SubscriptionCallback() {
+                @Override
+                public void onChildrenLoaded(String parentId, List<MediaBrowser.MediaItem> children) {
+                }
+            };
+    private ReactInstanceManager mReactInstanceManager;
+    private ReactRootView mReactRootView;
+    private MediaBrowser mMediaBrowser;
+    private final MediaBrowser.ConnectionCallback mConnectionCallback =
+            new MediaBrowser.ConnectionCallback() {
+                @Override
+                public void onConnected() {
+                    mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mSubscriptionCallback);
+                    MediaController mediaController = new MediaController(
+                            MainActivity.this, mMediaBrowser.getSessionToken());
 
+                    updateMetadata(mediaController.getMetadata());
+                    mediaController.registerCallback(mMediaControllerCallback);
+                    setMediaController(mediaController);
+                }
+            };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -158,16 +156,15 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         try {
             getMediaController().unregisterCallback(mMediaControllerCallback);
             mMediaBrowser.unsubscribe(mMediaBrowser.getRoot());
-        } catch(Exception ex){
+        } catch (Exception ex) {
             Log.e("MainActivity", ex.toString());
-        }
-        finally {
+        } finally {
             mMediaBrowser.disconnect();
         }
     }
 
     private void updateMetadata(MediaMetadata metadata) {
-        if(metadata == null){
+        if (metadata == null) {
             return;
         }
 //        Log.d("####", metadata.getDescription().getMediaId());

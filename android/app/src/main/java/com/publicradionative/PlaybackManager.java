@@ -38,14 +38,12 @@ class PlaybackManager implements AudioManager.OnAudioFocusChangeListener,
         MediaPlayer.OnCompletionListener {
 
     private final Context mContext;
+    private final Callback mCallback;
+    private final AudioManager mAudioManager;
     private int mState;
     private boolean mPlayOnFocusGain;
     private volatile MediaMetadata mCurrentMedia;
-
     private MediaPlayer mMediaPlayer;
-
-    private final Callback mCallback;
-    private final AudioManager mAudioManager;
 
     public PlaybackManager(Context context, Callback callback) {
         this.mContext = context;
@@ -177,6 +175,7 @@ class PlaybackManager implements AudioManager.OnAudioFocusChangeListener,
      */
     @Override
     public void onCompletion(MediaPlayer player) {
+        // TODO here we should play next song
         stop();
     }
 

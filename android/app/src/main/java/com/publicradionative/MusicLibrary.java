@@ -22,7 +22,9 @@ import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.browse.MediaBrowser;
 import android.os.Build;
+
 import com.facebook.react.bridge.ReadableArray;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -33,36 +35,14 @@ class MusicLibrary {
     private static final TreeMap<String, MediaMetadata> music = new TreeMap<>();
     private static final HashMap<String, String> uriRes = new HashMap<>();
 
-    public static String getRoot() {
-        return "";
+    private static String getAlbumArtUri(String albumArtResName) {
+        return "android.resource://" + BuildConfig.APPLICATION_ID + "/drawable/" + albumArtResName;
     }
 
-    public static void SetFromReadableArray(ReadableArray items) {
-        ArrayList<MediaMetadata> metaDataArr = new ArrayList<>();
-        int size = items.size();
-        for (int i = 0; i < size; i++) {
-            AudioTrack track = new AudioTrack(items.getMap(i));
 
-            MediaMetadata metaData = createMediaMetadata(
-                track.id.toString(),
-                track.title, 
-                track.artist,
-                    null,
-                 /*String genre*/ null, 
-                 track.duration,
-                 /*int musicResId*/ -1,
-                 /*Sint albumArtResId*/ -1,
-                 /*String albumArtResName*/null);
-
-            metaDataArr.add(metaData);
-            uriRes.put(track.id.toString(), track.uri);
-            music.put(track.id.toString(), metaData);
-        }
-    }
-
-    public static MediaMetadata createMediaMetadata(String mediaId, String title, String artist,
-                String album, String genre, long duration, int musicResId, int albumArtResId,
-                String albumArtResName) {
+    private static MediaMetadata createMediaMetadata(String mediaId, String title, String artist,
+                                                     String album, String genre, long duration, int musicResId, int albumArtResId,
+                                                     String albumArtResName) {
 
         return new MediaMetadata.Builder()
                 .putString(MediaMetadata.METADATA_KEY_MEDIA_ID, mediaId)
@@ -76,13 +56,36 @@ class MusicLibrary {
                 .build();
     }
 
+    public static String getRoot() {
+        return "";
+    }
+
+    public static void SetFromReadableArray(ReadableArray items) {
+        ArrayList<MediaMetadata> metaDataArr = new ArrayList<>();
+        int size = items.size();
+        for (int i = 0; i < size; i++) {
+            AudioTrack track = new AudioTrack(items.getMap(i));
+
+            MediaMetadata metaData = createMediaMetadata(
+                    track.id.toString(),
+                    track.title,
+                    track.artist,
+                    null,
+                 /*String genre*/ null,
+                    track.duration,
+                 /*int musicResId*/ -1,
+                 /*Sint albumArtResId*/ -1,
+                 /*String albumArtResName*/null);
+
+            metaDataArr.add(metaData);
+            uriRes.put(track.id.toString(), track.uri);
+            music.put(track.id.toString(), metaData);
+        }
+    }
+
     public static String getSongUri(String mediaId) {
         return uriRes.get(mediaId);
 //        return "android.resource://" + BuildConfig.APPLICATION_ID + "/" + getMusicRes(mediaId);
-    }
-
-    private static String getAlbumArtUri(String albumArtResName) {
-        return "android.resource://" + BuildConfig.APPLICATION_ID + "/drawable/" + albumArtResName;
     }
 
     public static Bitmap getAlbumBitmap(Context ctx, String mediaId) {
@@ -92,7 +95,7 @@ class MusicLibrary {
 
     public static List<MediaBrowser.MediaItem> getMediaItems() {
         List<MediaBrowser.MediaItem> result = new ArrayList<>();
-        for (MediaMetadata metadata: music.values()) {
+        for (MediaMetadata metadata : music.values()) {
             result.add(new MediaBrowser.MediaItem(metadata.getDescription(),
                     MediaBrowser.MediaItem.FLAG_PLAYABLE));
         }
@@ -100,7 +103,7 @@ class MusicLibrary {
     }
 
     public static String getNextSong(String currentMediaId) {
-        if(currentMediaId == null) {
+        if (currentMediaId == null) {
             try {
                 return music.firstKey();
             } catch (Exception ex) {
@@ -121,7 +124,7 @@ class MusicLibrary {
         // Since MediaMetadata is immutable, we need to create a copy to set the album art
         // We don't set it initially on all items so that they don't take unnecessary memory
         MediaMetadata.Builder builder = new MediaMetadata.Builder();
-        for (String key: new String[]{MediaMetadata.METADATA_KEY_MEDIA_ID,
+        for (String key : new String[]{MediaMetadata.METADATA_KEY_MEDIA_ID,
                 MediaMetadata.METADATA_KEY_ALBUM, MediaMetadata.METADATA_KEY_ARTIST,
                 MediaMetadata.METADATA_KEY_GENRE, MediaMetadata.METADATA_KEY_TITLE}) {
             builder.putString(key, metadataWithoutBitmap.getString(key));

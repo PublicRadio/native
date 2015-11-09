@@ -17,7 +17,9 @@ public class LinkOpener extends ReactContextBaseJavaModule {
     }
 
     @Override
-    public String getName() { return "LinkOpener"; }
+    public String getName() {
+        return "LinkOpener";
+    }
 
     @ReactMethod
     public void open(String link) {

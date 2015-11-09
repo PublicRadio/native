@@ -3,17 +3,17 @@ package com.publicradionative;
 import android.app.Activity;
 import android.media.session.PlaybackState;
 import android.util.Log;
+
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.facebook.react.bridge.ReadableArray;
-import java.util.ArrayList;
 
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
+    private static final String TAG = "BackgroundPlayer";
+    public static BackgroundPlayer backgroundPlayer;
     private ReactApplicationContext context;
     private Activity currentActivity;
-    public static BackgroundPlayer backgroundPlayer;
-    private static final String TAG = "BackgroundPlayer";
 
     public BackgroundPlayer(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
@@ -25,7 +25,9 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     }
 
     @Override
-    public String getName() { return "BackgroundPlayer"; }
+    public String getName() {
+        return "BackgroundPlayer";
+    }
 
     @ReactMethod
     public void setTrackList(ReadableArray items) {
@@ -33,7 +35,9 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
             stop();
             MusicLibrary.SetFromReadableArray(items);
             setNextTrack();
-        } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+        } catch (Exception e) {
+            Log.wtf(TAG, "react" + e.getMessage());
+        }
     }
 
     @ReactMethod
@@ -41,7 +45,7 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         String key = MusicService.mPlayback.getCurrentMediaId();
 
         String nextTrack = MusicLibrary.getNextSong(key);
-        if(nextTrack == null){
+        if (nextTrack == null) {
             return;
         }
         stop();
@@ -50,17 +54,29 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void play() {
-        try { currentActivity.getMediaController().getTransportControls().play(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+        try {
+            currentActivity.getMediaController().getTransportControls().play();
+        } catch (Exception e) {
+            Log.wtf(TAG, "react" + e.getMessage());
+        }
     }
 
     @ReactMethod
-    public void stop() { 
-        try { currentActivity.getMediaController().getTransportControls().stop(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+    public void stop() {
+        try {
+            currentActivity.getMediaController().getTransportControls().stop();
+        } catch (Exception e) {
+            Log.wtf(TAG, "react" + e.getMessage());
+        }
     }
 
     @ReactMethod
-    public void pause() { 
-        try { currentActivity.getMediaController().getTransportControls().pause(); } catch (Exception e) { Log.wtf(TAG, "react" + e.getMessage()); }
+    public void pause() {
+        try {
+            currentActivity.getMediaController().getTransportControls().pause();
+        } catch (Exception e) {
+            Log.wtf(TAG, "react" + e.getMessage());
+        }
     }
 
     private void dispatchReduxUpdatePlaybackState(String eventName) {
@@ -68,11 +84,11 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     }
 
     public void updatePlaybackState(PlaybackState state) {
-        if(state == null || PlaybackState.STATE_STOPPED == state.getState()){
+        if (state == null || PlaybackState.STATE_STOPPED == state.getState()) {
             dispatchReduxUpdatePlaybackState("STATE_STOPPED");
-        } else if(PlaybackState.STATE_PAUSED == state.getState()) {
+        } else if (PlaybackState.STATE_PAUSED == state.getState()) {
             dispatchReduxUpdatePlaybackState("STATE_PAUSED");
-        } else if(PlaybackState.STATE_PLAYING == state.getState()) {
+        } else if (PlaybackState.STATE_PLAYING == state.getState()) {
             dispatchReduxUpdatePlaybackState("STATE_PLAYING");
         }
     }
