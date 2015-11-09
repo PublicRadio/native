@@ -25,8 +25,7 @@ android {
 apply plugin: 'com.github.triplet.play'
 
 play {
-    serviceAccountEmail = '776171952583-lllmfs451sqrkp0oi20fhk9tdhccje3m@developer.gserviceaccount.com'
-    pk12File = file('../PublicRadio-2ff3a2cd8514.p12')
+    jsonFile = file('keys.json')
 }
 
 dependencies {
