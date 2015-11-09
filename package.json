@@ -1,8 +1,19 @@
 {
   "name": "PublicRadioNative",
-  "private": true,
+  "private":true,
+  "config": {
+    "ghooks": {
+      "pre-push": "make test",
+      "post-merge": "npm install",
+      "post-rewrite": "npm install"
+    },
+    "commitizen": {
+      "path": "./node_modules/cz-conventional-changelog"
+    }
+  },
   "scripts": {
     "start": "react-native run-android",
+    "test": "echo \"no tests yet\"",
     "semantic-release": "semantic-release pre && semantic-release post"
   },
   "dependencies": {
@@ -23,6 +34,9 @@
     "url": "https://github.com/PublicRadio/native.git"
   },
   "devDependencies": {
-    "semantic-release": "^4.3.5"
+    "cz-conventional-changelog": "^1.1.4",
+    "ghooks": "^0.3.2",
+    "semantic-release": "^4.3.5",
+    "validate-commit-msg": "^1.0.0"
   }
 }
