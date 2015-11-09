@@ -13,8 +13,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-public class ProjectModulesPackage implements ReactPackage {
-    private Activity currentActivity;
+class ProjectModulesPackage implements ReactPackage {
+    private final Activity currentActivity;
 
     public ProjectModulesPackage(Activity activity) {
         currentActivity = activity;

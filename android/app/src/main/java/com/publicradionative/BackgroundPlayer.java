@@ -12,8 +12,8 @@ import com.facebook.react.bridge.ReadableArray;
 public class BackgroundPlayer extends ReactContextBaseJavaModule {
     private static final String TAG = "BackgroundPlayer";
     public static BackgroundPlayer backgroundPlayer;
-    private ReactApplicationContext context;
-    private Activity currentActivity;
+    private final ReactApplicationContext context;
+    private final Activity currentActivity;
 
     public BackgroundPlayer(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);

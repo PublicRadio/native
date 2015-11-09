@@ -8,8 +8,8 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 
-public class LinkOpener extends ReactContextBaseJavaModule {
-    Context context;
+class LinkOpener extends ReactContextBaseJavaModule {
+    private final Context context;
 
     public LinkOpener(ReactApplicationContext reactContext) {
         super(reactContext);

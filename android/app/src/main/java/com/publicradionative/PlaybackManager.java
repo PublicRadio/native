@@ -51,7 +51,7 @@ class PlaybackManager implements AudioManager.OnAudioFocusChangeListener,
         this.mCallback = callback;
     }
 
-    public boolean isPlaying() {
+    private boolean isPlaying() {
         return mPlayOnFocusGain || (mMediaPlayer != null && mMediaPlayer.isPlaying());
     }
 
@@ -63,7 +63,7 @@ class PlaybackManager implements AudioManager.OnAudioFocusChangeListener,
         return mCurrentMedia == null ? null : mCurrentMedia.getDescription().getMediaId();
     }
 
-    public int getCurrentStreamPosition() {
+    private int getCurrentStreamPosition() {
         return mMediaPlayer != null ? mMediaPlayer.getCurrentPosition() : 0;
     }
 

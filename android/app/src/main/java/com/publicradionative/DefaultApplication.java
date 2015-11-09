@@ -9,9 +9,9 @@ import com.vk.sdk.VKSdk;
 
 
 public class DefaultApplication extends Application {
-    VKAccessToken vkAccessToken;
-    TokenCallback vkAccessTokenCallback;
-    VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
+    private VKAccessToken vkAccessToken;
+    private TokenCallback vkAccessTokenCallback;
+    private final VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
         public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
             Log.i("VK", "Token changed, callback " + (vkAccessTokenCallback != null ? "exists" : "not exists"));

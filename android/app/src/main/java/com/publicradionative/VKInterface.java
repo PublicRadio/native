@@ -11,9 +11,9 @@ import com.vk.sdk.VKSdk;
 /**
  * Created by vrodionov on 10/31/15.
  */
-public class VKInterface extends ReactContextBaseJavaModule {
-    Context context;
-    Activity currentActivity;
+class VKInterface extends ReactContextBaseJavaModule {
+    private final Context context;
+    private final Activity currentActivity;
 
     public VKInterface(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
