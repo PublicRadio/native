@@ -5,12 +5,10 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-class TokenCallback {
-    private final ReactApplicationContext context;
+public class TokenCallback {
+    ReactApplicationContext context;
 
-    public TokenCallback(ReactApplicationContext ctx) {
-        context = ctx;
-    }
+    public TokenCallback(ReactApplicationContext ctx) {context = ctx;}
 
     private void sendEvent(String eventName, WritableMap params) {
         context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
