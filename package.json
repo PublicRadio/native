@@ -3,7 +3,7 @@
   "private":true,
   "config": {
     "ghooks": {
-      "pre-push": "make test",
+      "pre-push": "npm run test",
       "post-merge": "npm install",
       "post-rewrite": "npm install"
     },
