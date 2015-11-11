@@ -2,6 +2,10 @@ sudo: false
 language: android
 jdk: oraclejdk8
  
+cache:
+  directories:
+  - android/.gradle
+
 env:
   global:
     - ANDROID_API_LEVEL=23

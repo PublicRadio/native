@@ -1,9 +1,9 @@
-const SemanticReleaseError = require('@semantic-release/error')
+const SemanticReleaseError = require('semantic-release/error')
 
 const npmlog = require('npmlog')
 const RegClient = require('npm-registry-client')
 
-module.exports = function (pluginConfig, {pkg, npm, plugins, options}, cb) {
+export default (pluginConfig, {pkg, npm, plugins, options}, cb) => {
   npmlog.level = npm.loglevel || 'warn'
   let clientConfig = {log: npmlog}
   // disable retries for tests
