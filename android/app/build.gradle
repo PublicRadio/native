@@ -1,4 +1,9 @@
+import groovy.json.JsonSlurper
+
 apply plugin: 'com.android.application'
+
+def signConfigFile = new File("signConfig.json")
+def signConfigJson = new JsonSlurper().parseText(signConfigFile.text)
 
 android {
     compileSdkVersion 23
@@ -8,14 +13,34 @@ android {
         applicationId "com.publicradionative"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 1
-        versionName "1.0"
+        versionCode 3
+        versionName "2.1.0"
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
     }
+
+    signingConfigs {
+        debug {
+            storeFile rootProject.file('debug.keystore')
+            storePassword 'android'
+            keyAlias 'androiddebugkey'
+            keyPassword 'android'
+        }
+
+        if (System.getenv("TRAVIS")) {
+            release {
+                storeFile file("public-radio.jks")
+                storePassword signConfigJson.storePassword
+                keyAlias signConfigJson.keyAlias
+                keyPassword signConfigJson.keyPassword
+            }
+        }
+    }
+
     buildTypes {
         release {
+            signingConfig signingConfigs.release
             minifyEnabled false  // Set this to true to enable Proguard
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }

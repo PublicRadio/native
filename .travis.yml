@@ -29,6 +29,7 @@ before_install:
   - npm i -g npm@^2.0.0
   - npm i
   - cd android && chmod +x gradlew
+  - npm run travis:before-install
 
 android:
   components:
@@ -58,6 +59,8 @@ notifications:
   email: false
 node_js:
   - '4'
+after_success:
+  - npm run semantic-release
 branches:
   except:
     - "/^v\\d+\\.\\d+\\.\\d+$/"

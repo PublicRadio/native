@@ -37,3 +37,5 @@ npm-debug.log
 *.apk
 *.jks
 keys.json
+android/app/secure
+signConfig.json

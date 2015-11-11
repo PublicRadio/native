@@ -1,6 +1,5 @@
 {
-  "name": "PublicRadioNative",
-  "private":true,
+  "name": "public-radio-native-android",
   "config": {
     "ghooks": {
       "pre-push": "npm run test",
@@ -11,10 +10,17 @@
       "path": "./node_modules/cz-conventional-changelog"
     }
   },
+  "release": {
+    "getLastRelease": "./semantic-release/publish-to-playstore"
+  },
   "scripts": {
+    "travis:decrypt-files": "cd android/app/secure_enc && openssl aes-256-cbc -K $encrypted_bb315525e952_key -iv $encrypted_bb315525e952_iv -in secrets.tar.enc -out secrets.tar -d",
+    "travis:unpack-files": "cd android/app/secure_enc && tar xvf secrets.tar",
+    "travis:move-files": "cd android/app/secure_enc && mv keys.json ../ && mv public-radio.jks ../ && mv signConfig.json ../",
+    "travis:before-install": "npm run travis:unpack-files && npm run travis:decrypt-files && npm run travis:move-files",
     "start": "react-native run-android",
     "test": "echo \"no tests yet\"",
-    "semantic-release": "semantic-release pre && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "dependencies": {
     "immutable": "^3.7.5",
