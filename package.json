@@ -14,6 +14,7 @@
     "getLastRelease": "./semantic-release/publish-to-playstore"
   },
   "scripts": {
+    "build:android" : "cd android/app && gradle assembleRelease",
     "travis:decrypt-files": "cd android/app/secure_enc && openssl aes-256-cbc -K $encrypted_bb315525e952_key -iv $encrypted_bb315525e952_iv -in secrets.tar.enc -out secrets.tar -d",
     "travis:unpack-files": "cd android/app/secure_enc && tar xvf secrets.tar",
     "travis:move-files": "cd android/app/secure_enc && mv keys.json ../ && mv public-radio.jks ../ && mv signConfig.json ../",

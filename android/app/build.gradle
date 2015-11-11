@@ -28,13 +28,11 @@ android {
             keyPassword 'android'
         }
 
-        if (System.getenv("TRAVIS")) {
-            release {
-                storeFile file("public-radio.jks")
-                storePassword signConfigJson.storePassword
-                keyAlias signConfigJson.keyAlias
-                keyPassword signConfigJson.keyPassword
-            }
+        release {
+            storeFile file("public-radio.jks")
+            storePassword signConfigJson.storePassword
+            keyAlias signConfigJson.keyAlias
+            keyPassword signConfigJson.keyPassword
         }
     }
 
