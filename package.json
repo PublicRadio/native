@@ -11,10 +11,10 @@
     }
   },
   "release": {
-    "getLastRelease": "./semantic-release/publish-to-playstore"
+    "getLastRelease": "./semantic-release//Users/sergeylapin/repos/native/semantic-release/npm-post-publish-hook.babel.js"
   },
   "scripts": {
-    "build:android" : "cd android/app && gradle assembleRelease",
+    "build:android-release" : "cd android/app && gradle assembleRelease",
     "travis:decrypt-files": "cd android/app/secure_enc && openssl aes-256-cbc -K $encrypted_bb315525e952_key -iv $encrypted_bb315525e952_iv -in secrets.tar.enc -out secrets.tar -d",
     "travis:unpack-files": "cd android/app/secure_enc && tar xvf secrets.tar",
     "travis:move-files": "cd android/app/secure_enc && mv keys.json ../ && mv public-radio.jks ../ && mv signConfig.json ../",
