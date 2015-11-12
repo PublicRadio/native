@@ -1,16 +1,69 @@
 sudo: false
-language: node_js
+language: android
+jdk: oraclejdk8
+ 
 cache:
   directories:
-    - node_modules
+	- node_modules
+	- android/.gradle
+
+env:
+  global:
+    - ANDROID_API_LEVEL=23
+    - ANDROID_BUILD_TOOLS_VERSION=23.0.1
+    - ANDROID_ABI=google_apis/armeabi-v7a
+    - ADB_INSTALL_TIMEOUT=8 # minutes (2 minutes by default - see #247)
+
+before_script:
+  # Create and start emulator
+  # - android list targets
+  # - echo no | android create avd --force -n test -t "Google Inc.:Google APIs:"$ANDROID_API_LEVEL --abi $ANDROID_ABI
+  # - emulator -avd test -no-skin -no-audio -no-window &
+  # - android-wait-for-emulator
+  # - adb shell input keyevent 82 &
+
+script:
+  # - ./wait_for_emulator
+  # - ./gradlew connectedCheck -PdisablePreDex
+  # - npm run build:android-release
+  
+node_js:
+  - '4'
+
+before_install:
+  - npm i -g npm@^2.0.0
+  - npm i
+  - cd android && chmod +x gradlew
+  - npm run travis:before-install
+
+android:
+  components:
+  # Uncomment the lines below if you want to
+    # use the latest revision of Android SDK Tools
+    # - platform-tools
+    # - tools
+
+    # The BuildTools version used by your project
+    - build-tools-23.0.1
+
+    # The SDK version used to compile your project
+    - android-23
+
+    # Additional components
+    # - extra-google-google_play_services
+    # - extra-google-m2repository
+    # - extra-android-m2repository
+    # - addon-google_apis-google-23
+
+    # Specify at least one system image,
+    # if you need to run emulator(s) during your tests
+    # - sys-img-armeabi-v7a-android-23
+    # - sys-img-x86-android-17
+    - extra
 notifications:
   email: false
 node_js:
   - '4'
-before_install:
-  - npm i -g npm@^2.0.0
-before_script:
-  - npm prune
 after_success:
   - npm run semantic-release
 branches:
