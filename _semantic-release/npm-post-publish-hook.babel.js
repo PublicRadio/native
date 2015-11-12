@@ -1,2 +1,2 @@
 require('babel/register')
-module.exports = require('./npm-post-publish-hook.js')
+module.exports = require('./github-post.js')
