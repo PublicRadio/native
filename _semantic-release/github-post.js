@@ -19,6 +19,9 @@ const promiseHook = ({log, pluginConfig, config, version}) =>
       .progress((childProcess) => {
           console.log('[spawn] childProcess.pid: ', childProcess.pid);
           childProcess.stdout.on('data', (data)=> {
+              if(data.toString() === '' || data.toString() === '.''){
+                return;
+              }
               console.log('[spawn] stdout: ', data.toString());
           });
           childProcess.stderr.on('data', (data)=> {
