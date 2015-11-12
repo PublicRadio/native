@@ -11,5 +11,8 @@ module.exports = function (pluginConfig, config, cb) {
     version: pkg.version,
     repository: repository,
     file: false
-  }, cb)
+  }, (err, log)=>{
+    console.log(log)
+   cb(err, log) 
+  })
 }
