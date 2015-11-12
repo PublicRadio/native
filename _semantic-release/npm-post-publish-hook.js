@@ -5,9 +5,11 @@ const githubPost = require('./github-post')
 
 const beforeGitHub = (config, cb){
   console.log(config)
-  cb()
+  cb(config)
 }
 
-module.exports = function (config, cb) {
-  beforeGitHub(config, ()=>githubPost(config, cb))
+module.exports = function (_config, cb) {
+  beforeGitHub(_config, (config)=>{
+    githubPost(config, cb)
+  })
 }
