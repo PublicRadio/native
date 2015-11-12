@@ -5,6 +5,11 @@ apply plugin: 'com.android.application'
 def signConfigFile = new File("./signConfig.json")
 def signConfigJson = new JsonSlurper().parseText(signConfigFile.text)
 
+def (versionMajor, versionMinor, versionPatch) = newVersion.tokenize( '.' )
+def newVersionCode = versionMajor.toInteger() * 10000 + versionMinor.toInteger() * 100 + versionPatch.toInteger()
+println "newVersion: " + newVersion
+println "newVersionCode: " + newVersionCode
+
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.1"
@@ -13,8 +18,8 @@ android {
         applicationId "com.publicradionative"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode 3
-        versionName "2.1.0"
+        versionCode newVersionCode
+        versionName newVersion
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
