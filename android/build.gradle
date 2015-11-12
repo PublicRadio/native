@@ -13,9 +13,14 @@ buildscript {
     }
 }
 
+plugins {
+    id "me.tatarka.retrolambda" version "3.2.3"
+}
+
 allprojects {
     repositories {
         mavenLocal()
         jcenter()
     }
 }
+
