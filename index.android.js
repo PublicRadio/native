@@ -4,7 +4,7 @@
  */
 'use strict';
 
-console.log('!!')
+console.log('!!!')
 import React, { AppRegistry } from 'react-native';
 import {App} from './app/containers/App';
 
