@@ -12,7 +12,7 @@ const changelogPromise = (opt)=>
       resolve(log);
     })
   })
-
+  
 const promiseHook = ({log, pluginConfig, config, version}) =>
   new Promise((resolve, reject) =>
     spawn('npm', ['run', 'publish:android-release', `--public-radio-native-android:version="${version}"`])
