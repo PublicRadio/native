@@ -13,23 +13,27 @@ const changelogPromise = (opt)=>
     })
   })
 
-const promiseHook = ({log, pluginConfig, config, version})=>
-  spawn('npm', ['run', 'publish:android-release', `--public-radio-native-android:version="${version}"`])
-    .progress((childProcess) =>{
-        console.log('[spawn] childProcess.pid: ', childProcess.pid);
-        childProcess.stdout.on('data', (data)=> {
-            console.log('[spawn] stdout: ', data.toString());
-        });
-        childProcess.stderr.on('data', (data)=> {
-            console.log('[spawn] stderr: ', data.toString());
-        });
-    })
-    .then(() =>{
-        console.log('[spawn] done!');
-    })
-    .fail((err) =>{
-        console.error('[spawn] ERROR: ', err);
-    })
+const promiseHook = ({log, pluginConfig, config, version}) =>
+  new Promise((resolve, reject) =>
+    spawn('npm', ['run', 'publish:android-release', `--public-radio-native-android:version="${version}"`])
+      .progress((childProcess) => {
+          console.log('[spawn] childProcess.pid: ', childProcess.pid);
+          childProcess.stdout.on('data', (data)=> {
+              console.log('[spawn] stdout: ', data.toString());
+          });
+          childProcess.stderr.on('data', (data)=> {
+              console.log('[spawn] stderr: ', data.toString());
+          });
+      })
+      .then(() =>{
+          console.log('[spawn] done!');
+          resolve()
+      })
+      .fail((err) =>{
+          console.error('[spawn] ERROR: ', err);
+          reject()
+      })
+    )
 
 module.exports = function (pluginConfig, config, cb) {
   const {pkg} = config;
@@ -38,11 +42,11 @@ module.exports = function (pluginConfig, config, cb) {
   const {version} = pkg
 
   return changelogPromise({
-    version
+    version,
     repository,
     file: false
   })
-  .catch(err)
+  .catch((err)=>console.error(err))
   .then((log)=>
     promiseHook({log, pluginConfig, config, version})
     .then(()=>cb(log))
