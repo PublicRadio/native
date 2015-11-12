@@ -4,7 +4,7 @@ var execSync = require('child_process').execSync;
 
 const executePromise = (command)=> 
     new Promise((resolve, reject)=>{
-      const stdout = exec(command);
+      const stdout = execSync(command);
       resolve(stdout);
      //  , (err, stdout, stderr)=>{
      //    if(err) {
