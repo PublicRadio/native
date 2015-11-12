@@ -7,10 +7,10 @@ cache:
     - node_modules
     - android/.gradle
     - $HOME/.gradle/wrapper
-	- $HOME/.gradle/native
-	- $HOME/.gradle/daemon
-	- $HOME/.gradle/caches/jars-1
-	- $HOME/.gradle/caches/2.4		
+    - $HOME/.gradle/native
+    - $HOME/.gradle/daemon
+    - $HOME/.gradle/caches/jars-1
+    - $HOME/.gradle/caches/2.4
 
 env:
   global:
