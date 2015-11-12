@@ -14,8 +14,8 @@
     "generateNotes": "./_semantic-release/npm-post-publish-hook.babel.js"
   },
   "scripts": {
-    "publish:android-release": "cd android/app && ./gradlew publishRelease -PnewVersion=$npm_package_config_version",
-    "build:android-release": "cd android/app && ./gradlew assembleRelease",
+    "publish:android-release": "cd android && ./gradlew publishRelease -PnewVersion=$npm_package_config_version",
+    "build:android-release": "cd android && ./gradlew assembleRelease",
     "travis:decrypt-files": "cd android/app/secure_enc && openssl aes-256-cbc -K $encrypted_bb315525e952_key -iv $encrypted_bb315525e952_iv -in secrets.tar.enc -out secrets.tar -d",
     "travis:unpack-files": "cd android/app/secure_enc && tar xvf secrets.tar",
     "travis:move-files": "cd android/app/secure_enc && mv keys.json ../ && mv public-radio.jks ../ && mv signConfig.json ../",
