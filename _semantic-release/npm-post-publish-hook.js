@@ -1,9 +1,9 @@
-import SemanticReleaseError from 'semantic-release/error';
-import npmlog from 'npmlog';
-import RegClient from 'npm-registry-client';
-import publishPlaystore from 'publish-playstore';
+const SemanticReleaseError = require('@semantic-release/error');
+const npmlog = require('npmlog');
+const RegClient = require('npm-registry-client');
+const publishPlaystore = require('./publish-playstore');
 
-const npmClientGetPromise = (url, opt)=>
+const npmClientGetPromise = (client)=>(url, opt)=>
   new Promise((resolve, reject)=>{
     client.get(url, opt, (err, data) => {
       if (err) {
@@ -11,17 +11,17 @@ const npmClientGetPromise = (url, opt)=>
         return 
       }
       resolve(data);
-    }  
+    })  
   })
 
-export default (pluginConfig, {pkg, npm, plugins, options}, cb) => {
+module.exports = function (pluginConfig, {pkg, npm, plugins, options}, cb)  {
   npmlog.level = npm.loglevel || 'warn'
   let clientConfig = {log: npmlog}
   // disable retries for tests
   if (pluginConfig && pluginConfig.retry) clientConfig.retry = pluginConfig.retry
   const client = new RegClient(clientConfig)
 
-  npmClientGetPromise(`${npm.registry}${pkg.name.replace('/', '%2F')}`, {auth: npm.auth})
+  npmClientGetPromise(client)(`${npm.registry}${pkg.name.replace('/', '%2F')}`, {auth: npm.auth})
   .catch((err)=>{
     if (err && (err.statusCode === 404 || /not found/i.test(err.message))) {
       return cb(null, {})
@@ -49,6 +49,7 @@ Tag a version manually or define "fallbackTags".`, 'ENODISTTAG'))
   })
   .then((version)=>publishPlaystore(version).then(()=>version))
   .then((version)=>{
+
     cb(null, {
       version,
       gitHead: data.versions[version].gitHead,
