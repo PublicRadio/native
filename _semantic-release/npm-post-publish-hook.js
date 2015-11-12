@@ -45,11 +45,12 @@ module.exports = function (pluginConfig, {pkg, npm, plugins, options}, cb)  {
 `There is no release with the dist-tag "${npm.tag}" yet.
 Tag a version manually or define "fallbackTags".`, 'ENODISTTAG'))
     }
-    return version;
+    return {version, data};
   })
-  .then((version)=>publishPlaystore(version).then(()=>version))
-  .then((version)=>{
-
+  .then(({version, data})=>{
+  	return publishPlaystore({version, data}).then(()=>({version, data}))
+  })
+  .then(({version, data})=>{
     cb(null, {
       version,
       gitHead: data.versions[version].gitHead,

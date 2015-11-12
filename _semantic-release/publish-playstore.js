@@ -1,4 +1,5 @@
-export default (version) => {
-	console.log(version)
-
-}
+export default (version) => 
+	new Promise((resolve, reject)=>{
+	    console.log(version)
+	    resolve(version);
+	})
