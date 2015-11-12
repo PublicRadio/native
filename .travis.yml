@@ -1,17 +1,17 @@
 sudo: false
 language: android
-jdk: oraclejdk8
  
+before_cache:
+  - rm -f $HOME/.gradle/caches/modules-2/modules-2.lock
+  
 cache:
   directories:
-  
     - node_modules
     - android/.gradle
     - $HOME/.gradle/wrapper
     - $HOME/.gradle/native
     - $HOME/.gradle/daemon
-    - $HOME/.gradle/caches/jars-1
-    - $HOME/.gradle/caches/2.4
+    - $HOME/.gradle/caches
 
 env:
   global:
