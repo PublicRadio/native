@@ -38,7 +38,7 @@ module.exports = function (pluginConfig, {pkg, npm, plugins, options}, cb)  {
         options.fallbackTags[npm.tag] &&
         data['dist-tags'][options.fallbackTags[npm.tag]]) {
       version = data['dist-tags'][options.fallbackTags[npm.tag]]
-    }
+    } 
 
     if (!version) {
       return cb(new SemanticReleaseError(
