@@ -2,13 +2,21 @@ import groovy.json.JsonSlurper
 
 apply plugin: 'com.android.application'
 
-def signConfigFile = new File("./signConfig.json")
+def signConfigFile = new File("$projectDir/signConfig.json")
 def signConfigJson = new JsonSlurper().parseText(signConfigFile.text)
 
-def (versionMajor, versionMinor, versionPatch) = newVersion.tokenize( '.' )
-def newVersionCode = versionMajor.toInteger() * 10000 + versionMinor.toInteger() * 100 + versionPatch.toInteger()
-println "newVersion: " + newVersion
-println "newVersionCode: " + newVersionCode
+def _versionName = "1.0.0"
+
+if(!project.hasProperty('newVersion')){
+    println "newVersion is undefined!"
+} else {
+    _versionName = newVersion;
+}
+
+def (versionMajor, versionMinor, versionPatch) = _versionName.tokenize('.')
+def _versionCode = versionMajor.toInteger() * 10000 + versionMinor.toInteger() * 100 + versionPatch.toInteger()
+println "versionName: " + _versionName
+println "versionCode: " + _versionCode
 
 android {
     compileSdkVersion 23
@@ -18,8 +26,8 @@ android {
         applicationId "com.publicradionative"
         minSdkVersion 21
         targetSdkVersion 22
-        versionCode newVersionCode
-        versionName newVersion
+        versionCode _versionCode
+        versionName _versionName
         ndk {
             abiFilters "armeabi-v7a", "x86"
         }
