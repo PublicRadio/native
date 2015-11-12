@@ -52,6 +52,6 @@ module.exports = function (pluginConfig, config, cb) {
   .catch((err)=>console.error(err))
   .then((log)=>
     promiseHook({log, pluginConfig, config, version})
-    .then(()=>cb(log))
+    .then(()=>cb(null, log))
   )
 }
