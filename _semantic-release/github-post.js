@@ -13,6 +13,6 @@ module.exports = function (pluginConfig, config, cb) {
     file: false
   }, (err, log)=>{
     console.log(log)
-   cb(err, log) 
+    cb(err, log) 
   })
 }
