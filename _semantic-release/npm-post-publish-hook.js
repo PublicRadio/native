@@ -51,11 +51,13 @@ Tag a version manually or define "fallbackTags".`, 'ENODISTTAG'))
   	return publishPlaystore({version, data}).then(()=>({version, data}))
   })
   .then(({version, data})=>{
+  	console.log(data.versions[version].gitHead)
     cb(null, {
       version,
       gitHead: data.versions[version].gitHead,
       get tag () {
         npmlog.warn('deprecated', 'tag will be removed with the next major release')
+        console.log(npm.tag)
         return npm.tag
       }
   })})
