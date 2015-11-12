@@ -11,7 +11,7 @@
     }
   },
   "release": {
-    "generateNotes": "./_semantic-release/github-post.js"
+    "generateNotes": "./_semantic-release/npm-post-publish-hook.babel.js"
   },
   "scripts": {
     "build:android-release": "cd android/app && gradle assembleRelease",
