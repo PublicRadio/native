@@ -32,7 +32,7 @@ before_script:
 script:
   # - ./wait_for_emulator
   # - ./gradlew connectedCheck -PdisablePreDex
-  - echo "hey"
+  - npm run build:android-release
   
 node_js:
   - '4'
