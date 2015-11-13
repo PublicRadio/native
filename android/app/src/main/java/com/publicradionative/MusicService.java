@@ -79,6 +79,6 @@ public class MusicService extends MediaBrowserService {
 
     @Override
     public void onLoadChildren(final String parentMediaId, final Result<List<MediaItem>> result) {
-        result.sendResult(MusicLibrary.getMediaItems());
+        result.sendResult((List<MediaItem>) MusicLibrary.getMediaItems());
     }
 }

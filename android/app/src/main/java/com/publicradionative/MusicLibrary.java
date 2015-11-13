@@ -24,11 +24,15 @@ import android.media.browse.MediaBrowser;
 import android.os.Build;
 
 import com.facebook.react.bridge.ReadableArray;
+import com.facebook.react.bridge.ReadableMap;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.TreeMap;
+
+import static fj.data.Array.array;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
 class MusicLibrary {
@@ -61,26 +65,24 @@ class MusicLibrary {
     }
 
     public static void SetFromReadableArray(ReadableArray items) {
-        ArrayList<MediaMetadata> metaDataArr = new ArrayList<>();
-        int size = items.size();
-        for (int i = 0; i < size; i++) {
-            AudioTrack track = new AudioTrack(items.getMap(i));
-
-            MediaMetadata metaData = createMediaMetadata(
-                    track.id.toString(),
-                    track.title,
-                    track.artist,
-                    null,
+        array(ReactNativeUtils.toArrayOfMaps(items).toArray())
+                .map((item) -> (ReadableMap)(item))
+                .map(AudioTrack::new)
+                .map((track) -> {
+                    MediaMetadata metaData = createMediaMetadata(
+                            track.id.toString(),
+                            track.title,
+                            track.artist,
+                            null,
                  /*String genre*/ null,
-                    track.duration,
+                            track.duration,
                  /*int musicResId*/ -1,
                  /*Sint albumArtResId*/ -1,
                  /*String albumArtResName*/null);
-
-            metaDataArr.add(metaData);
-            uriRes.put(track.id.toString(), track.uri);
-            music.put(track.id.toString(), metaData);
-        }
+                    uriRes.put(track.id.toString(), track.uri);
+                    music.put(track.id.toString(), metaData);
+                    return metaData;
+                });
     }
 
     public static String getSongUri(String mediaId) {
@@ -93,13 +95,11 @@ class MusicLibrary {
 //        return BitmapFactory.decodeResource(ctx.getResources(), MusicLibrary.getAlbumRes(mediaId));
     }
 
-    public static List<MediaBrowser.MediaItem> getMediaItems() {
-        List<MediaBrowser.MediaItem> result = new ArrayList<>();
-        for (MediaMetadata metadata : music.values()) {
-            result.add(new MediaBrowser.MediaItem(metadata.getDescription(),
-                    MediaBrowser.MediaItem.FLAG_PLAYABLE));
-        }
-        return result;
+    public static Collection<MediaBrowser.MediaItem> getMediaItems() {
+        return array(music.values().toArray())
+                .map((item) -> (MediaMetadata) (item))
+                .map((metadata) -> new MediaBrowser.MediaItem((metadata).getDescription(), MediaBrowser.MediaItem.FLAG_PLAYABLE))
+                .toCollection();
     }
 
     public static String getNextSong(String currentMediaId) {
