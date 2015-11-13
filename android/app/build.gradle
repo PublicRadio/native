@@ -60,7 +60,7 @@ apply plugin: 'com.github.triplet.play'
 apply plugin: 'me.tatarka.retrolambda'
 
 retrolambda {
-  jdk System.getenv("JAVA8_HOME")
+    javaVersion JavaVersion.VERSION_1_7
 }
 
 play {
