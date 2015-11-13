@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.publicradionative;
+package com.publicradionative.player;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -25,7 +25,6 @@ import android.net.Uri;
 import android.os.Build;
 import android.os.PowerManager;
 import android.os.SystemClock;
-
 import java.io.IOException;
 
 import static android.media.MediaPlayer.OnCompletionListener;

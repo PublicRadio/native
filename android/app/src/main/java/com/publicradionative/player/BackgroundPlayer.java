@@ -1,8 +1,9 @@
-package com.publicradionative;
+package com.publicradionative.player;
 
 import android.app.Activity;
 import android.media.session.PlaybackState;
 import android.util.Log;
+import com.publicradionative.ReduxSender;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -20,8 +21,6 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         currentActivity = activity;
         context = reactContext;
         backgroundPlayer = this;
-
-//        updatePlaybackState(currentActivity.getMediaController().getPlaybackState());
     }
 
     @Override
@@ -54,29 +53,17 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
 
     @ReactMethod
     public void play() {
-        try {
-            currentActivity.getMediaController().getTransportControls().play();
-        } catch (Exception e) {
-            Log.wtf(TAG, "react" + e.getMessage());
-        }
+        currentActivity.getMediaController().getTransportControls().play();
     }
 
     @ReactMethod
     public void stop() {
-        try {
-            currentActivity.getMediaController().getTransportControls().stop();
-        } catch (Exception e) {
-            Log.wtf(TAG, "react" + e.getMessage());
-        }
+        currentActivity.getMediaController().getTransportControls().stop();
     }
 
     @ReactMethod
     public void pause() {
-        try {
-            currentActivity.getMediaController().getTransportControls().pause();
-        } catch (Exception e) {
-            Log.wtf(TAG, "react" + e.getMessage());
-        }
+        currentActivity.getMediaController().getTransportControls().pause();
     }
 
     private void dispatchReduxUpdatePlaybackState(String eventName) {

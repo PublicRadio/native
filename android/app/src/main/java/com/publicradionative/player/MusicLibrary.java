@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.publicradionative;
+package com.publicradionative.player;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -25,12 +25,15 @@ import android.os.Build;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
+import com.publicradionative.BuildConfig;
+import com.publicradionative.utils.ReactNativeUtils;
 
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.TreeMap;
+
+import fj.data.Array;
+import fj.data.List;
 
 import static fj.data.Array.array;
 
@@ -65,7 +68,7 @@ class MusicLibrary {
     }
 
     public static void SetFromReadableArray(ReadableArray items) {
-        array(ReactNativeUtils.toArrayOfMaps(items).toArray())
+        Array.array(ReactNativeUtils.toArrayOfMaps(items).toArray())
                 .map((item) -> (ReadableMap)(item))
                 .map(AudioTrack::new)
                 .map((track) -> {

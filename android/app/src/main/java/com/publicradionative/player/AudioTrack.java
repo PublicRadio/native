@@ -1,16 +1,14 @@
-package com.publicradionative;
+package com.publicradionative.player;
 
 import com.facebook.react.bridge.ReadableMap;
 
-public class AudioTrack {
-    public final String uri;
-    public final String artist;
-    public final String title;
+class AudioTrack {
+    public final String uri, artist, title;
     public final Integer id;
     public final Long duration;
 
     public AudioTrack(ReadableMap trackInfo) {
-        uri = trackInfo.getString("url");
+        uri = trackInfo.hasKey("url") ? trackInfo.getString("url") : trackInfo.getString("uri");
         artist = trackInfo.getString("artist");
         title = trackInfo.getString("title");
         duration = (long) trackInfo.getInt("duration");

@@ -5,7 +5,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.modules.core.DeviceEventManagerModule;
 
-public class TokenCallback {
+class TokenCallback {
     ReactApplicationContext context;
 
     public TokenCallback(ReactApplicationContext ctx) {context = ctx;}

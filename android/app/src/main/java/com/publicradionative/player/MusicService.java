@@ -1,14 +1,15 @@
-package com.publicradionative;
+package com.publicradionative.player;
 
 import android.annotation.TargetApi;
 import android.media.MediaMetadata;
+import android.media.browse.MediaBrowser;
 import android.media.browse.MediaBrowser.MediaItem;
 import android.media.session.MediaSession;
-import android.media.session.PlaybackState;
 import android.os.Build;
 import android.os.Bundle;
 import android.service.media.MediaBrowserService;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
@@ -79,6 +80,6 @@ public class MusicService extends MediaBrowserService {
 
     @Override
     public void onLoadChildren(final String parentMediaId, final Result<List<MediaItem>> result) {
-        result.sendResult((List<MediaItem>) MusicLibrary.getMediaItems());
+        result.sendResult(new ArrayList<>(MusicLibrary.getMediaItems()));
     }
 }

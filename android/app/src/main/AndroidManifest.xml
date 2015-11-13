@@ -24,7 +24,7 @@
          consumers through MediaBrowserService and MediaSession. Consumers connect to it through
          MediaBrowser (for browsing) and MediaController (for play session control) -->
         <service
-            android:name=".MusicService"
+            android:name=".player.MusicService"
             android:exported="true"
             android:enabled="true">
             <intent-filter>

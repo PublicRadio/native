@@ -1,16 +1,11 @@
 package com.publicradionative;
 
 import android.app.Activity;
-import android.content.Context;
-
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
 import com.facebook.react.bridge.ReactMethod;
 import com.vk.sdk.VKSdk;
 
-/**
- * Created by vrodionov on 10/31/15.
- */
 class VKInterface extends ReactContextBaseJavaModule {
     private final Activity currentActivity;
 

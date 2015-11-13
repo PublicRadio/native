@@ -1,4 +1,4 @@
-package com.publicradionative;
+package com.publicradionative.player;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -14,19 +14,22 @@ import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Build;
 
+import com.publicradionative.MainActivity;
+import com.publicradionative.R;
+
 /**
  * Keeps track of a notification and updates it automatically for a given
  * MediaSession. This is required so that the music service
  * don't get killed during playback.
  */
 @TargetApi(Build.VERSION_CODES.LOLLIPOP)
-public class MediaNotificationManager extends BroadcastReceiver {
+class MediaNotificationManager extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 412;
     private static final int REQUEST_CODE = 100;
 
-    private static final String ACTION_PAUSE = "com.example.android.musicplayercodelab.pause";
-    private static final String ACTION_PLAY = "com.example.android.musicplayercodelab.play";
-    private static final String ACTION_NEXT = "com.example.android.musicplayercodelab.next";
+    private static final String ACTION_PAUSE = "com.publicradionative.pause";
+    private static final String ACTION_PLAY = "com.publicradionative.play";
+    private static final String ACTION_NEXT = "com.publicradionative.next";
 
     private final MusicService mService;
 
@@ -150,5 +153,4 @@ public class MediaNotificationManager extends BroadcastReceiver {
         return PendingIntent.getActivity(mService, REQUEST_CODE, openUI,
                 PendingIntent.FLAG_CANCEL_CURRENT);
     }
-
 }

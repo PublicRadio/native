@@ -7,7 +7,7 @@ import com.facebook.react.modules.core.DeviceEventManagerModule;
 
 import javax.annotation.Nullable;
 
-class ReduxSender {
+public class ReduxSender {
     private static WritableMap createReduxAction(String eventName, @Nullable WritableMap params) {
         WritableMap map = Arguments.createMap();
         map.putString("event", eventName);
@@ -18,9 +18,8 @@ class ReduxSender {
         return map;
     }
 
-    public static void sendEvent(ReactContext reactContext,
-                                 String eventName,
-                                 @Nullable WritableMap params) {
+    public static void sendEvent(ReactContext reactContext, String eventName,
+@Nullable WritableMap params) {
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("ReduxAction", createReduxAction(eventName, params));
     }
