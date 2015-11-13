@@ -60,12 +60,9 @@ public class MusicService extends MediaBrowserService {
 
         final MediaNotificationManager mediaNotificationManager = new MediaNotificationManager(this);
 
-        mPlayback = new PlaybackManager(this, new PlaybackManager.Callback() {
-            @Override
-            public void onPlaybackStatusChanged(PlaybackState state) {
-                mSession.setPlaybackState(state);
-                mediaNotificationManager.update(mPlayback.getCurrentMedia(), state, getSessionToken());
-            }
+        mPlayback = new PlaybackManager(this, state -> {
+            mSession.setPlaybackState(state);
+            mediaNotificationManager.update(mPlayback.getCurrentMedia(), state, getSessionToken());
         });
     }
 
