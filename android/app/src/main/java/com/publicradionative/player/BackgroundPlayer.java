@@ -1,6 +1,7 @@
 package com.publicradionative.player;
 
 import android.app.Activity;
+import android.media.session.MediaController;
 import android.media.session.PlaybackState;
 import android.util.Log;
 import com.publicradionative.ReduxSender;
@@ -15,12 +16,14 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     public static BackgroundPlayer backgroundPlayer;
     private final ReactApplicationContext context;
     private final Activity currentActivity;
+    private final MediaController.TransportControls transportControls;
 
     public BackgroundPlayer(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
         currentActivity = activity;
         context = reactContext;
         backgroundPlayer = this;
+        transportControls = currentActivity.getMediaController().getTransportControls();
     }
 
     @Override
@@ -48,22 +51,22 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
             return;
         }
         stop();
-        currentActivity.getMediaController().getTransportControls().playFromMediaId(nextTrack, null);
+        transportControls.playFromMediaId(nextTrack, null);
     }
 
     @ReactMethod
     public void play() {
-        currentActivity.getMediaController().getTransportControls().play();
+        transportControls.play();
     }
 
     @ReactMethod
     public void stop() {
-        currentActivity.getMediaController().getTransportControls().stop();
+        transportControls.stop();
     }
 
     @ReactMethod
     public void pause() {
-        currentActivity.getMediaController().getTransportControls().pause();
+        transportControls.pause();
     }
 
     private void dispatchReduxUpdatePlaybackState(String eventName) {

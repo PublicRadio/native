@@ -119,7 +119,6 @@ class MediaNotificationManager extends BroadcastReceiver {
                 .setContentIntent(createContentIntent())
                 .setContentTitle(description.getTitle())
                 .setContentText(description.getSubtitle())
-                .setLargeIcon(MusicLibrary.getAlbumBitmap(mService, description.getMediaId()))
                 .setOngoing(isPlaying)
                 .setWhen(isPlaying ? System.currentTimeMillis() - state.getPosition() : 0)
                 .setShowWhen(isPlaying)
