@@ -19,7 +19,7 @@ public class ReduxSender {
     }
 
     public static void sendEvent(ReactContext reactContext, String eventName,
-@Nullable WritableMap params) {
+                                 @Nullable WritableMap params) {
         reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
                 .emit("ReduxAction", createReduxAction(eventName, params));
     }

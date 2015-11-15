@@ -213,5 +213,4 @@ class PlaybackManager implements AudioManager.OnAudioFocusChangeListener,
     public interface Callback {
         void onPlaybackStatusChanged(PlaybackState state);
     }
-
 }

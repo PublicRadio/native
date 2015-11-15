@@ -10,14 +10,10 @@ class TokenCallback {
 
     public TokenCallback(ReactApplicationContext ctx) {context = ctx;}
 
-    private void sendEvent(String eventName, WritableMap params) {
-        context.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class)
-               .emit(eventName, params);
-    }
-
     void callbackCall(String token) {
         WritableMap params = Arguments.createMap();
         params.putString("token", token);
-        this.sendEvent("AccessTokenUpdate", params);
+
+        ReduxSender.sendEvent(context, "AccessTokenUpdate", params);
     }
 }
