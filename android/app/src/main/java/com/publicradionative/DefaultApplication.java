@@ -10,7 +10,7 @@ import com.vk.sdk.VKSdk;
 
 public class DefaultApplication extends Application {
     private VKAccessToken vkAccessToken;
-    private TokenCallback vkAccessTokenCallback;
+    private ProjectModulesPackage.Callback vkAccessTokenCallback;
     private final VKAccessTokenTracker vkAccessTokenTracker = new VKAccessTokenTracker() {
         @Override
         public void onVKAccessTokenChanged(VKAccessToken oldToken, VKAccessToken newToken) {
@@ -22,11 +22,11 @@ public class DefaultApplication extends Application {
 
     private void invokeTokenCallback() {
         if (vkAccessTokenCallback != null) {
-            vkAccessTokenCallback.callbackCall(vkAccessToken != null ? vkAccessToken.accessToken : "");
+            vkAccessTokenCallback.passToken(vkAccessToken != null ? vkAccessToken.accessToken : "");
         }
     }
 
-    public void registerTokenCallback(TokenCallback callback) {
+    public void registerTokenCallback(ProjectModulesPackage.Callback callback) {
         vkAccessTokenCallback = callback;
     }
 
