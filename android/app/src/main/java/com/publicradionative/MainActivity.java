@@ -58,28 +58,10 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
             BackgroundPlayer.backgroundPlayer.updatePlaybackState(null);
         }
     };
-    private final MediaBrowser.SubscriptionCallback mSubscriptionCallback =
-            new MediaBrowser.SubscriptionCallback() {
-                @Override
-                public void onChildrenLoaded(String parentId, List<MediaBrowser.MediaItem> children) {
-                }
-            };
+
     private ReactInstanceManager mReactInstanceManager;
     private ReactRootView mReactRootView;
     private MediaBrowser mMediaBrowser;
-    private final MediaBrowser.ConnectionCallback mConnectionCallback =
-            new MediaBrowser.ConnectionCallback() {
-                @Override
-                public void onConnected() {
-                    mMediaBrowser.subscribe(mMediaBrowser.getRoot(), mSubscriptionCallback);
-                    MediaController mediaController = new MediaController(
-                            MainActivity.this, mMediaBrowser.getSessionToken());
-
-                    updateMetadata(mediaController.getMetadata());
-                    mediaController.registerCallback(mMediaControllerCallback);
-                    setMediaController(mediaController);
-                }
-            };
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
@@ -148,7 +130,22 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
     public void onStart() {
         super.onStart();
 
-        mMediaBrowser = new MediaBrowser(this, new ComponentName(this, MusicService.class), mConnectionCallback, null);
+        mMediaBrowser = new MediaBrowser(this, new ComponentName(this, MusicService.class), new MediaBrowser.ConnectionCallback(){
+            @Override
+            public void onConnected() {
+                mMediaBrowser.subscribe(mMediaBrowser.getRoot(), new MediaBrowser.SubscriptionCallback() {
+                    @Override
+                    public void onChildrenLoaded(String parentId, List<MediaBrowser.MediaItem> children) {
+                    }
+                });
+                MediaController mediaController = new MediaController(
+                        MainActivity.this, mMediaBrowser.getSessionToken());
+
+                updateMetadata(mediaController.getMetadata());
+                mediaController.registerCallback(mMediaControllerCallback);
+                setMediaController(mediaController);
+            }
+        }, null);
         mMediaBrowser.connect();
     }
 

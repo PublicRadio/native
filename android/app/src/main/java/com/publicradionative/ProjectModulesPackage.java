@@ -31,7 +31,7 @@ class ProjectModulesPackage implements ReactPackage {
         modules.add(new LinkOpener(reactContext));
         modules.add(new VKInterface(reactContext, currentActivity));
         DefaultApplication application = (DefaultApplication) currentActivity.getApplication();
-        application.registerTokenCallback((String token)->{
+        application.setVkAccessTokenCallback((String token)->{
             WritableMap params = Arguments.createMap();
             params.putString("token", token);
             ReduxSender.sendEvent(reactContext, "AccessTokenUpdate", params);
