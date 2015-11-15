@@ -2,7 +2,6 @@ package com.publicradionative.player;
 
 import android.annotation.TargetApi;
 import android.content.Context;
-import android.graphics.Bitmap;
 import android.media.MediaMetadata;
 import android.media.browse.MediaBrowser;
 import android.os.Build;
@@ -43,13 +42,14 @@ class MusicLibrary {
                 .map((item) -> (ReadableMap)(item))
                 .map(AudioTrack::new)
                 .map((track) -> {
+                    String _id = track.getId().toString();
                     MediaMetadata metaData = createMediaMetadata(
-                            track.id.toString(),
-                            track.title,
-                            track.artist,
-                            track.duration);
-                    uriRes.put(track.id.toString(), track.uri);
-                    music.put(track.id.toString(), metaData);
+                            _id,
+                            track.getTitle(),
+                            track.getArtist(),
+                            track.getDuration());
+                    uriRes.put(_id, track.getUri());
+                    music.put(_id, metaData);
                     return metaData;
                 });
     }

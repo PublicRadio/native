@@ -2,10 +2,14 @@ package com.publicradionative.player;
 
 import com.facebook.react.bridge.ReadableMap;
 
+import lombok.Getter;
+
 class AudioTrack {
-    public final String uri, artist, title;
-    public final Integer id;
-    public final Long duration;
+    private final @Getter String uri;
+    private final @Getter String artist;
+    private final @Getter String title;
+    private final @Getter Integer id;
+    private final @Getter Long duration;
 
     public AudioTrack(ReadableMap trackInfo) {
         uri = trackInfo.hasKey("url") ? trackInfo.getString("url") : trackInfo.getString("uri");
