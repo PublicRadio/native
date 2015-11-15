@@ -4,7 +4,7 @@ import android.app.Activity;
 import android.media.session.MediaController;
 import android.media.session.PlaybackState;
 import android.util.Log;
-import com.publicradionative.ReduxSender;
+import com.publicradionative.utils.ReduxSender;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;

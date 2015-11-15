@@ -7,7 +7,6 @@ import com.vk.sdk.VKAccessToken;
 import com.vk.sdk.VKAccessTokenTracker;
 import com.vk.sdk.VKSdk;
 
-
 public class DefaultApplication extends Application {
     private VKAccessToken vkAccessToken;
     private ProjectModulesPackage.Callback vkAccessTokenCallback;

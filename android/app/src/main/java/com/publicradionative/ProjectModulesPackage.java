@@ -10,6 +10,7 @@ import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.WritableMap;
 import com.facebook.react.uimanager.ViewManager;
 import com.publicradionative.player.BackgroundPlayer;
+import com.publicradionative.utils.ReduxSender;
 
 import java.util.ArrayList;
 import java.util.Arrays;
