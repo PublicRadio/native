@@ -25,10 +25,6 @@ DeviceEventEmitter.addListener('ReduxAction', (e:Event) => {
     
     store.dispatch(nativeActions[e.actionName](e.payload));
 });
-DeviceEventEmitter.addListener('AccessTokenUpdate', (e:Event) => {
-    vk.sid = e.token
-    store.dispatch(require('./modules/vk').authorize(!!vk.sid))
-});
 
 store.dispatch(require('./modules/vk').authorize(false))
 store.dispatch(require('./modules/loader').init())
