@@ -15,15 +15,13 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     private static final String TAG = "BackgroundPlayer";
     public static BackgroundPlayer backgroundPlayer;
     private final ReactApplicationContext context;
-    private final Activity currentActivity;
     private final MediaController.TransportControls transportControls;
 
     public BackgroundPlayer(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
-        currentActivity = activity;
         context = reactContext;
         backgroundPlayer = this;
-        transportControls = currentActivity.getMediaController().getTransportControls();
+        transportControls = activity.getMediaController().getTransportControls();
     }
 
     @Override
