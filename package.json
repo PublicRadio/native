@@ -22,7 +22,10 @@
     "travis:before-install": "npm run travis:decrypt-files && npm run travis:unpack-files && npm run travis:move-files",
     "start": "react-native run-android",
     "test": "echo \"no tests yet\"",
-    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post",
+    "acz": "git add . && git cz",
+    "czp": "git cz && git push",
+    "aczp": "git add . && git cz && git push"
   },
   "dependencies": {
     "immutable": "^3.7.5",
