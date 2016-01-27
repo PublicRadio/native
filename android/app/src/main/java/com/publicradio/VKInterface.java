@@ -1,4 +1,4 @@
-package com.publicradionative;
+package com.publicradio;
 
 import android.app.Activity;
 import com.facebook.react.bridge.ReactApplicationContext;

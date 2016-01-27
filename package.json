@@ -1,5 +1,5 @@
 {
-  "name": "public-radio-native-android",
+  "name": "publicradio",
   "config": {
     "ghooks": {
       "pre-push": "npm run test",
@@ -29,8 +29,7 @@
   },
   "dependencies": {
     "immutable": "^3.7.5",
-    "react": "^0.14.1",
-    "react-native": "^0.13.2",
+    "react-native": "^0.18.0",
     "react-native-vector-icons": "^1.1.0",
     "react-redux": "^3.1.0",
     "redux": "^3.0.4",

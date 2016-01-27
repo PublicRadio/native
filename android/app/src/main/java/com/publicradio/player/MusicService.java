@@ -1,4 +1,4 @@
-package com.publicradionative.player;
+package com.publicradio.player;
 
 import android.annotation.TargetApi;
 import android.media.MediaMetadata;

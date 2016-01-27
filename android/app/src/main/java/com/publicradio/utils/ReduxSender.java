@@ -1,4 +1,4 @@
-package com.publicradionative.utils;
+package com.publicradio.utils;
 
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;

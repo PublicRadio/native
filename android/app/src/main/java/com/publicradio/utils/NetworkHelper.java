@@ -14,7 +14,7 @@
 * limitations under the License.
 */
 
-package com.publicradionative.utils;
+package com.publicradio.utils;
 
 import android.content.Context;
 import android.net.ConnectivityManager;

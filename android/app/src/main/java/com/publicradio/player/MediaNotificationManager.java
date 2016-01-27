@@ -1,4 +1,4 @@
-package com.publicradionative.player;
+package com.publicradio.player;
 
 import android.annotation.TargetApi;
 import android.app.Notification;
@@ -14,8 +14,8 @@ import android.media.session.MediaSession;
 import android.media.session.PlaybackState;
 import android.os.Build;
 
-import com.publicradionative.MainActivity;
-import com.publicradionative.R;
+import com.publicradio.MainActivity;
+import com.publicradio.R;
 
 /**
  * Keeps track of a notification and updates it automatically for a given
@@ -27,9 +27,9 @@ class MediaNotificationManager extends BroadcastReceiver {
     private static final int NOTIFICATION_ID = 412;
     private static final int REQUEST_CODE = 100;
 
-    private static final String ACTION_PAUSE = "com.publicradionative.pause";
-    private static final String ACTION_PLAY = "com.publicradionative.play";
-    private static final String ACTION_NEXT = "com.publicradionative.next";
+    private static final String ACTION_PAUSE = "com.publicradio.pause";
+    private static final String ACTION_PLAY = "com.publicradio.play";
+    private static final String ACTION_NEXT = "com.publicradio.next";
 
     private final MusicService mService;
 

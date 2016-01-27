@@ -1,4 +1,4 @@
-package com.publicradionative;
+package com.publicradio;
 
 import com.facebook.react.bridge.ReadableMap;
 

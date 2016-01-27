@@ -1,4 +1,4 @@
-package com.publicradionative.player;
+package com.publicradio.player;
 
 import android.annotation.TargetApi;
 import android.content.Context;
@@ -8,7 +8,7 @@ import android.os.Build;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;
-import com.publicradionative.utils.ReactNativeUtils;
+import com.publicradio.utils.ReactNativeUtils;
 
 import java.util.Collection;
 import java.util.HashMap;

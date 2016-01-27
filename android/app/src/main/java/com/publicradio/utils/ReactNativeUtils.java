@@ -1,4 +1,4 @@
-package com.publicradionative.utils;
+package com.publicradio.utils;
 
 import com.facebook.react.bridge.ReadableArray;
 import com.facebook.react.bridge.ReadableMap;

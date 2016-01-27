@@ -1,4 +1,4 @@
-package com.publicradionative;
+package com.publicradio;
 
 import android.content.Context;
 import android.content.Intent;

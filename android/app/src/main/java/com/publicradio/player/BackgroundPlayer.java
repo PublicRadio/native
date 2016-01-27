@@ -1,10 +1,10 @@
-package com.publicradionative.player;
+package com.publicradio.player;
 
 import android.app.Activity;
 import android.media.session.MediaController;
 import android.media.session.PlaybackState;
 import android.util.Log;
-import com.publicradionative.utils.ReduxSender;
+import com.publicradio.utils.ReduxSender;
 
 import com.facebook.react.bridge.ReactApplicationContext;
 import com.facebook.react.bridge.ReactContextBaseJavaModule;
@@ -15,14 +15,14 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
     private static final String TAG = "BackgroundPlayer";
     public static BackgroundPlayer backgroundPlayer;
     private final ReactApplicationContext context;
-    private final MediaController.TransportControls transportControls;
+    private MediaController.TransportControls transportControls = null;
 
     public BackgroundPlayer(ReactApplicationContext reactContext, Activity activity) {
         super(reactContext);
         context = reactContext;
         backgroundPlayer = this;
         MediaController mediaController = activity.getMediaController();
-        transportControls = mediaController.getTransportControls();
+        // transportControls = mediaController.getTransportControls();
     }
 
     @Override

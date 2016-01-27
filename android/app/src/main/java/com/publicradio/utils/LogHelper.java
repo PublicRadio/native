@@ -13,11 +13,11 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.publicradionative.utils;
+package com.publicradio.utils;
 
 import android.util.Log;
 
-import com.publicradionative.BuildConfig;
+import com.publicradio.BuildConfig;
 
 
 class LogHelper {
