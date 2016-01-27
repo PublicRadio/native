@@ -1,0 +1,1 @@
+{"message":"TransformError: /Users/sergeylapin/repos/native/node_modules/redux-actions/lib/createAction.js: [BABEL] /Users/sergeylapin/repos/native/node_modules/redux-actions/lib/createAction.js: Unknown option: /Users/sergeylapin/repos/native/node_modules/redux-actions/.babelrc.stage","type":"TransformError","errors":[{}]}

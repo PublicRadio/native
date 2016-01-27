@@ -122,7 +122,7 @@ public class MainActivity extends AppCompatActivity implements DefaultHardwareBa
         super.onResume();
 
         if (mReactInstanceManager != null) {
-            mReactInstanceManager.onResume(this);
+            mReactInstanceManager.onResume(this, this);
         }
     }
 

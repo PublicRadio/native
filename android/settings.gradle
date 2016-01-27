@@ -1,4 +1,4 @@
-rootProject.name = 'PublicRadioNative'
+rootProject.name = 'publicradio'
 
 include ':vksdk_library', ':app'
 

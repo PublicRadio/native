@@ -15,7 +15,7 @@ const changelogPromise = (opt)=>
   
 const promiseHook = ({log, pluginConfig, config, version}) =>
   new Promise((resolve, reject) =>
-    spawn('npm', ['run', 'publish:android-release', `--public-radio-native-android:version="${version}"`])
+    spawn('npm', ['run', 'publish:android-release', `--publicradio:version="${version}"`])
       .progress((childProcess) => {
           console.log('[spawn] childProcess.pid: ', childProcess.pid);
           childProcess.stdout.on('data', (data)=> {

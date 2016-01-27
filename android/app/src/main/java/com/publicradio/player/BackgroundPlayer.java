@@ -21,7 +21,8 @@ public class BackgroundPlayer extends ReactContextBaseJavaModule {
         super(reactContext);
         context = reactContext;
         backgroundPlayer = this;
-        transportControls = activity.getMediaController().getTransportControls();
+        MediaController mediaController = activity.getMediaController();
+        transportControls = mediaController.getTransportControls();
     }
 
     @Override
