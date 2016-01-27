@@ -11,6 +11,8 @@ import React, {
   View
 } from 'react-native';
 
+// import {App} from './app/containers/App';
+
 class publicradio extends Component {
   render() {
     return (
@@ -49,3 +51,4 @@ const styles = StyleSheet.create({
 });
 
 AppRegistry.registerComponent('publicradio', () => publicradio);
+// AppRegistry.registerComponent('publicradio', () => App);

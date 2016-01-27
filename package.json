@@ -20,7 +20,6 @@
     "travis:unpack-files": "cd android/app/secure_enc && tar xvf secrets.tar",
     "travis:move-files": "cd android/app/secure_enc && mv keys.json ../ && mv public-radio.jks ../ && mv signConfig.json ../",
     "travis:before-install": "npm run travis:decrypt-files && npm run travis:unpack-files && npm run travis:move-files",
-    "start": "react-native run-android",
     "test": "echo \"no tests yet\"",
     "semantic-release": "semantic-release pre && npm publish && semantic-release post",
     "acz": "git add . && git cz",
